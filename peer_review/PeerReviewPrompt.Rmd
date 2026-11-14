@@ -1,0 +1,12 @@
+---
+title: "PeerReviewPrompt"
+output: html_document
+---
+
+The purpose of this deliverable is to provide a channel for learning about possible issues in your groups, and also to prompt you to reflect on your role in supporting the function of your team. Please submit a half-page document including the following:
+
+1. For every member of the team, please summarize their main contributions to the project. Please indicate if any member was either especially valuable, or did not contribute a reasonable amount to the work.
+
+2. An assessment of how well your team worked as a whole.
+
+A note about confidentiality: If your instructor receives multiple reports of a student not contributing at a reasonable level, or damaging a team’s dynamics in some way, they may penalize the student’s grade for the lab. In such a scenario, the instructor will explain the issue to the student in general terms and avoid - to the extent possible - revealing details from the peer evaluations.

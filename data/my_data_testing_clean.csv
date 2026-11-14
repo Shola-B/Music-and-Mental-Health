@@ -1,0 +1,518 @@
+"Age","HoursPerDay","WhileWorking","StreamingService","BPM","ConsolidatedGenres","ConsolidatedMentalHealthScore_PC1","ConsolidatedMentalHealthScore_PC2"
+18,4,"No","Spotify",132,3,1.4,-1.27
+18,4,"Yes","Spotify",107,3,0.77,1.99
+18,5,"Yes","Spotify",86,3,2.06,0.47
+21,1,"Yes","Spotify",95,3,-0.31,0.11
+19,6,"Yes","Spotify",94,2,-2.63,0.21
+18,3,"Yes","Spotify",NA,2,1.24,0.98
+19,2,"Yes","Spotify",88,2,-2.15,-0.2
+18,4,"Yes","Spotify",148,5,-0.07,-1.08
+16,12,"Yes","Spotify",120,1,0.71,-1.93
+17,24,"Yes","Spotify",99,3,-0.28,0.69
+15,3,"No","Spotify",120,3,-0.79,0.65
+17,4,"Yes","Spotify",125,3,1.66,0.22
+16,3,"Yes","Other streaming service",84,4,2.68,1.5
+18,2,"No","Spotify",169,1,0.12,1.07
+14,12,"Yes","Spotify",136,3,1.85,-0.27
+17,2,"Yes","Spotify",126,2,0.57,0.49
+19,6,"Yes","Spotify",NA,1,0.96,0.13
+17,4,"No","Spotify",142,1,0.09,-0.95
+16,1,"Yes","Spotify",75,1,-3.03,0.11
+21,4,"Yes","Spotify",89,1,-0.09,0
+17,3,"Yes","Other streaming service",NA,3,-2.04,-0.37
+20,4,"Yes","Spotify",161,3,0.78,0.73
+23,2,"Yes","YouTube Music",80,4,-0.85,0.74
+18,5,"Yes","Spotify",130,1,0.2,-0.99
+37,0.25,"No","YouTube Music",147,1,-0.6,-1.42
+18,4,"Yes","Spotify",77,3,-1.37,-0.44
+24,3,"Yes","Spotify",115,1,0.89,0.09
+19,3,"Yes","Spotify",90,3,-0.03,0.8
+17,2,"Yes","Apple Music",128,3,-3.03,0.11
+16,6,"Yes","Spotify",169,3,1.57,-0.13
+23,1,"No","Apple Music",140,3,1.95,2.22
+22,4,"Yes","Spotify",126,1,0.87,-0.08
+18,6,"Yes","Spotify",91,1,1.4,2.27
+42,0,"","I do not use a streaming service.",NA,1,0.26,-0.88
+23,7,"Yes","Spotify",55,2,-0.37,0.47
+23,1,"Yes","I do not use a streaming service.",85,2,-1.33,1.01
+19,1,"No","YouTube Music",160,5,-0.83,0.49
+25,2,"No","Spotify",170,1,-0.53,-0.4
+36,6,"Yes","Spotify",174,1,0.46,-1.01
+24,3,"No","Spotify",130,1,-1.86,-1.04
+41,3,"Yes","Apple Music",130,1,1.43,-1.39
+36,2,"Yes","I do not use a streaming service.",127,1,-0.78,0.23
+19,3,"Yes","YouTube Music",160,2,0.44,-0.91
+31,2,"Yes","Spotify",NA,2,0.07,1.75
+16,4,"Yes","Spotify",NA,1,0.67,0
+26,2,"Yes","Spotify",165,3,-0.99,0.18
+22,0.5,"No","Apple Music",113,1,-0.21,-0.11
+17,5,"Yes","Spotify",95,2,-2.04,0.19
+19,10,"Yes","Spotify",110,3,-0.39,1.46
+18,2,"No","YouTube Music",150,3,0.96,2.61
+18,4,"Yes","YouTube Music",93,3,-1.07,-0.5
+19,5,"No","Spotify",90,5,1.46,-1.37
+19,3,"Yes","Spotify",118,5,-2.42,0.26
+22,2,"Yes","Spotify",126,3,0.7,-0.95
+16,2.5,"Yes","Spotify",103,1,-2.45,0.09
+37,1,"Yes","Spotify",115,1,2.91,1.26
+14,7,"Yes","Spotify",110,5,-2.63,0.21
+33,1,"No","I do not use a streaming service.",NA,2,-0.78,-0.33
+26,1,"No","Spotify",113,1,-2.06,0.02
+32,3,"Yes","Spotify",157,3,-1.6,-0.8
+30,5,"Yes","Spotify",160,1,0.63,-0.58
+43,6,"Yes","I do not use a streaming service.",109,3,0.31,-0.45
+24,4,"Yes","Spotify",175,1,0.02,-0.31
+20,3,"No","Spotify",121,2,-1.46,-1.26
+31,2,"No","Spotify",200,1,1.38,-0.89
+15,8,"Yes","Spotify",193,1,0.58,-1.06
+18,2,"No","Spotify",149,1,-0.68,-0.81
+25,0.5,"No","I do not use a streaming service.",140,5,-2.07,-0.12
+17,5,"Yes","Apple Music",134,3,2.32,0.72
+28,1,"No","YouTube Music",120,1,-0.44,-0.61
+34,4,"Yes","Other streaming service",161,1,-0.56,-0.44
+21,3,"Yes","YouTube Music",NA,1,1.89,1.94
+23,2,"Yes","Spotify",100,1,-1.13,0.32
+22,2,"Yes","Spotify",98,5,-0.33,-0.22
+19,8,"Yes","Spotify",100,3,-1.68,-0.05
+23,4,"Yes","Spotify",78,3,1.21,0.11
+23,2,"No","Spotify",117,1,-0.35,0.64
+22,1,"No","Spotify",128,3,-0.63,-1.36
+17,3,"Yes","Spotify",130,3,1.43,0.01
+23,2,"No","Spotify",NA,1,0.7,-0.95
+19,3,"Yes","Apple Music",126,2,0.38,0.63
+17,2,"Yes","Spotify",122,1,1.13,-0.26
+21,1,"No","YouTube Music",179,3,-0.92,-0.2
+22,10,"No","Spotify",128,2,0.5,-0.71
+24,1,"No","Spotify",86,1,-0.36,-0.8
+28,6,"Yes","Spotify",144,1,1.61,-1.09
+32,7,"Yes","Spotify",120,3,1.88,1.57
+18,2,"Yes","Spotify",101,3,1.31,0.93
+18,2,"Yes","Apple Music",NA,1,-0.62,-0.48
+25,1.5,"Yes","Spotify",61,1,-0.63,0.36
+17,4,"Yes","Spotify",79,4,-0.98,-0.71
+16,2,"Yes","Spotify",126,3,-1.39,-0.81
+27,10,"Yes","Spotify",185,1,0.37,-0.4
+22,6,"Yes","Other streaming service",140,1,1.92,-0.23
+26,3,"Yes","Spotify",160,1,0.47,-0.89
+19,8,"Yes","Spotify",174,3,0.8,-1.71
+32,3,"Yes","Spotify",144,3,1.01,0.06
+25,2,"No","Spotify",120,3,0.38,-1.11
+26,1,"No","Spotify",NA,1,1.69,1.69
+17,2,"Yes","Spotify",NA,3,-1.04,-0.01
+28,4,"Yes","I do not use a streaming service.",194,2,0.63,0.96
+41,4,"Yes","YouTube Music",60,3,-0.25,2.16
+18,1,"Yes","Spotify",190,1,1.13,-1.98
+18,2,"Yes","Other streaming service",122,1,-2.67,-0.13
+49,1,"Yes","Other streaming service",156,1,0.32,-0.75
+21,3,"Yes","Spotify",150,1,-0.86,-1.11
+27,10,"Yes","Spotify",194,1,0.47,-0.89
+19,1,"No","Spotify",160,1,-0.67,0.76
+27,3,"Yes","Spotify",171,1,-2.83,0.16
+27,1.5,"Yes","Spotify",95,1,0.04,0.29
+19,3,"Yes","Spotify",114,1,1.09,-1.44
+42,2.5,"Yes","YouTube Music",148,5,1.92,0.2
+19,5,"Yes","YouTube Music",136,4,-1.98,-0.64
+20,2,"Yes","Apple Music",141,1,-1.28,0.05
+28,2,"No","Spotify",146,1,-0.69,-1.13
+16,2,"No","I do not use a streaming service.",NA,3,-1.57,0.2
+18,2,"Yes","Spotify",164,1,-0.79,-0.09
+18,1.5,"Yes","YouTube Music",NA,5,0.69,-0.38
+21,2,"Yes","I do not use a streaming service.",101,1,0.47,-0.89
+25,2.5,"Yes","Apple Music",NA,5,0.77,0.12
+26,5,"Yes","Spotify",NA,1,-0.57,-0.89
+16,2,"Yes","Spotify",112,3,0.86,-0.91
+26,2,"Yes","Spotify",NA,1,0.17,-1.01
+22,1,"Yes","Spotify",NA,1,-1.05,-0.33
+20,4,"Yes","Apple Music",113,3,1.03,-1.08
+30,1,"No","Spotify",162,1,1.95,1.25
+26,4,"Yes","Other streaming service",NA,2,1.31,-0.51
+19,5,"Yes","Spotify",111,1,2.16,-1
+21,5,"Yes","",85,2,2.56,0.24
+22,2,"Yes","YouTube Music",120,1,1.25,-0.71
+44,3,"Yes","Other streaming service",130,3,1.87,-1.13
+22,3,"Yes","Spotify",NA,1,2.32,1.41
+26,5,"Yes","Spotify",109,1,2.94,0.59
+17,2,"No","Spotify",148,3,1.57,-0.83
+42,2,"No","YouTube Music",NA,1,0.58,0.39
+30,1,"No","Spotify",129,1,-1.28,0.76
+35,1,"Yes","Spotify",81,1,-2.16,0.22
+20,3,"No","Spotify",136,2,2.25,-0.78
+18,3,"Yes","Spotify",155,5,0.21,-0.58
+21,1,"No","Spotify",NA,3,0.57,-1.09
+19,6,"Yes","Spotify",52,1,-1.86,0.07
+31,2,"Yes","Spotify",92,1,1.41,0.16
+29,2,"Yes","Spotify",100,2,-0.04,-0.22
+20,3,"Yes","Spotify",120,1,0.21,0.45
+18,3,"Yes","Spotify",118,1,-0.65,0.37
+18,2,"Yes","Spotify",130,1,-1.82,0.41
+25,7,"Yes","Spotify",120,2,-2.48,0.07
+31,9,"Yes","YouTube Music",158,1,-0.92,0.27
+21,1,"Yes","Spotify",NA,1,-0.55,0.3
+30,1,"No","Other streaming service",119,2,0.68,-0.99
+40,2,"Yes","Apple Music",120,1,-0.91,-0.48
+64,4,"Yes","I do not use a streaming service.",200,1,-1.06,-0.19
+14,2,"Yes","Spotify",136,1,0.44,1.23
+26,6,"Yes","YouTube Music",104,1,-2.06,0.02
+35,4,"Yes","Spotify",90,2,1.29,-0.97
+33,1,"No","Other streaming service",120,3,0.11,-1.25
+27,5,"Yes","Spotify",140,1,-0.82,-1.56
+23,5,"Yes","Spotify",120,1,0.24,-0.69
+25,2,"Yes","Spotify",128,1,-0.95,-0.22
+16,4,"Yes","Apple Music",140,1,0.8,-1.16
+18,2,"Yes","Spotify",NA,3,0.46,-0.18
+29,5,"Yes","Spotify",NA,1,-0.96,-0.07
+31,6,"Yes","YouTube Music",136,3,1.26,0.73
+31,1,"No","Spotify",132,1,-0.62,-0.95
+38,6,"Yes","Spotify",107,5,1.84,0.72
+17,4,"No","Spotify",135,5,1.45,1.3
+25,2,"No","Apple Music",171,2,0.25,1.21
+20,2,"No","Spotify",220,1,-2.89,0.39
+16,4,"Yes","Spotify",85,3,-0.28,1.29
+20,2,"Yes","Spotify",174,3,1.79,0.93
+23,6,"Yes","Other streaming service",87,3,-0.95,1.79
+22,3,"Yes","Spotify",77,1,0.44,-1.47
+15,5,"Yes","I do not use a streaming service.",126,1,0.65,0.99
+22,1,"Yes","YouTube Music",80,1,-0.88,1.84
+21,10,"Yes","Spotify",92,3,1.17,-0.38
+19,2,"Yes","Spotify",120,3,-0.43,0.41
+32,0.5,"No","Apple Music",NA,1,-1.26,0.79
+18,2,"Yes","I do not use a streaming service.",150,1,0.56,-0.94
+21,3,"Yes","Spotify",108,2,-0.87,0.53
+19,2,"Yes","Spotify",125,2,-0.25,2.16
+25,1,"No","I do not use a streaming service.",NA,1,2.58,1.1
+21,1,"Yes","Spotify",85,1,-1.84,0.24
+19,5,"Yes","Spotify",141,1,-1.41,1.63
+23,4,"Yes","Spotify",NA,3,1,-0.82
+24,8,"Yes","I do not use a streaming service.",120,3,1.23,0.99
+15,3,"No","Spotify",84,3,0.42,1.06
+17,7,"Yes","Spotify",84,3,1.22,0.1
+20,1.5,"No","I do not use a streaming service.",60,1,0.18,0.42
+14,4,"Yes","Spotify",81,3,1.41,1
+24,4,"Yes","Spotify",150,1,2.06,0.47
+14,10,"Yes","Other streaming service",95,3,-0.93,-0.6
+23,2,"Yes","Spotify",138,1,0.5,-0.58
+28,2,"Yes","Apple Music",NA,1,-0.28,-0.16
+25,0.5,"Yes","Spotify",139,3,-0.65,0.37
+27,2,"Yes","Spotify",100,5,1.59,0.04
+18,5,"Yes","Spotify",NA,1,2.06,0.05
+17,3,"Yes","Apple Music",120,1,2,-1.44
+23,4.5,"Yes","Other streaming service",NA,1,0.11,0.24
+40,3,"Yes","Other streaming service",178,1,-1.72,-0.95
+16,2.5,"No","Spotify",110,3,-0.9,-0.16
+18,1,"No","Spotify",108,1,1.23,-1.17
+23,2,"No","Spotify",NA,1,0.97,3.02
+15,5,"Yes","I do not use a streaming service.",161,1,0.91,-1.04
+16,3,"Yes","Spotify",NA,2,1.4,-0.72
+16,0.5,"No","Spotify",156,1,-1.41,0.51
+20,8,"Yes","Apple Music",120,2,1.22,0.52
+33,2,"Yes","Spotify",NA,1,-0.81,-0.22
+22,3,"Yes","Spotify",90,2,1.38,-1.18
+21,3,"Yes","Spotify",85,3,0.9,-0.06
+21,5,"Yes","Apple Music",171,3,1.45,-0.24
+17,2,"Yes","Spotify",76,1,0.04,0.84
+22,1,"Yes","Spotify",108,1,-0.89,-0.02
+26,4,"Yes","Spotify",140,2,1.58,2.15
+30,1,"Yes","Spotify",200,3,-0.91,-0.75
+49,2,"Yes","Spotify",147,1,-2.74,-0.18
+32,2,"No","Spotify",158,3,-0.96,-0.54
+32,1,"No","I do not use a streaming service.",110,1,-0.25,-0.41
+22,6,"Yes","YouTube Music",103,2,-0.25,0.15
+21,4,"Yes","Spotify",62,1,0.13,-0.61
+17,1.5,"Yes","Spotify",180,1,1.31,-0.51
+13,10,"Yes","Spotify",140,3,-0.11,2.44
+38,3,"Yes","Spotify",NA,1,1.48,0.49
+23,3,"No","Apple Music",161,1,0.34,-0.29
+17,3,"Yes","Spotify",120,3,-2.5,-0.11
+59,2,"Yes","YouTube Music",103,3,-2.21,-0.39
+17,3,"Yes","Apple Music",113,3,-0.87,0.01
+23,5,"Yes","Spotify",120,1,1.8,-1.92
+19,5,"Yes","Spotify",118,2,1.21,-0.31
+32,6,"Yes","Spotify",91,3,1.14,2.16
+40,6,"Yes","Spotify",128,2,1.12,0.16
+21,3,"Yes","Spotify",86,2,0.25,-0.08
+21,10,"Yes","Spotify",107,1,1.88,1.02
+23,2,"Yes","Spotify",180,3,1.71,-0.41
+35,3,"No","Spotify",0,2,0.39,2.2
+18,1.5,"No","Spotify",150,3,-0.58,-1.16
+21,10,"Yes","I do not use a streaming service.",112,2,1.5,0.38
+23,3,"Yes","Spotify",66,1,1.69,2.54
+13,2.5,"Yes","Spotify",118,2,-0.98,1.34
+19,3,"Yes","Spotify",110,3,-1.38,-0.02
+18,16,"Yes","Spotify",90,5,-0.47,0.96
+18,0.5,"No","YouTube Music",66,1,-1.33,-0.15
+19,5,"Yes","Spotify",158,2,-1.42,0.06
+15,2,"No","YouTube Music",105,3,-0.62,0.83
+17,2,"Yes","Spotify",208,1,0.05,-0.42
+24,1.5,"Yes","Other streaming service",171,3,-1.41,-0.09
+23,1,"Yes","Spotify",150,5,0.49,-0.3
+25,2,"Yes","YouTube Music",NA,4,1.87,-0.71
+16,15,"Yes","Spotify",85,3,2,-1.44
+20,0.5,"No","I do not use a streaming service.",150,3,1.66,-0.34
+17,3,"Yes","Spotify",104,4,1.67,0.83
+29,2,"Yes","I do not use a streaming service.",NA,1,0.64,-0.26
+16,2,"Yes","Spotify",NA,1,0.23,-0.96
+21,1,"Yes","Spotify",147,2,0.44,-0.22
+16,24,"Yes","Spotify",120,3,-0.37,-0.78
+32,2,"Yes","Pandora",NA,1,1.16,0.05
+10,2,"Yes","YouTube Music",112,1,-0.76,0.4
+27,3,"Yes","Spotify",200,3,-2.22,0.31
+24,3,"Yes","Spotify",75,1,0.16,-0.03
+17,7,"Yes","Apple Music",140,3,1.45,-0.24
+64,5,"Yes","Other streaming service",NA,4,1.07,-1.01
+33,4,"Yes","Apple Music",114,1,0.61,-0.19
+32,3,"Yes","I do not use a streaming service.",93,1,-1.09,-1.19
+27,3,"Yes","YouTube Music",100,2,-2.48,0.07
+20,2,"Yes","I do not use a streaming service.",114,1,0.43,1.24
+23,2,"Yes","I do not use a streaming service.",109,2,-0.92,1.68
+19,3,"No","Apple Music",NA,1,0.05,-0.84
+12,2,"Yes","YouTube Music",NA,1,-2.59,-0.32
+17,0,"No","Other streaming service",89,3,-1.01,0.61
+32,2,"Yes","Spotify",84,1,-0.67,1.47
+20,2,"Yes","Spotify",132,3,-1.02,0.16
+18,5,"Yes","Spotify",124,3,0.7,0.92
+14,2,"Yes","Spotify",181,1,0.01,-0.02
+13,4,"Yes","Other streaming service",126,1,1.39,-0.71
+14,4,"Yes","Spotify",106,1,1.09,-1.16
+15,5,"Yes","Spotify",87,2,1.05,-0.34
+24,6,"Yes","YouTube Music",NA,1,-0.26,-0.73
+17,2,"Yes","Apple Music",117,1,1.97,1.23
+44,2,"No","Spotify",105,1,0.08,-0.4
+23,1,"No","Spotify",NA,1,-2.68,0.02
+21,1,"No","Apple Music",160,1,-0.38,0.76
+23,2,"Yes","Spotify",141,1,-1.1,-1.5
+26,14,"Yes","Spotify",158,3,0.96,-2
+13,3,"Yes","YouTube Music",80,1,1.46,-1.08
+15,3,"Yes","Spotify",118,1,1.76,0.07
+57,2,"Yes","YouTube Music",125,5,-1.24,-1.04
+12,0.5,"Yes","Spotify",109,1,1,-0.82
+26,6,"Yes","Spotify",156,3,2.26,-1.2
+17,2,"Yes","Spotify",NA,1,0.84,0.59
+69,4,"Yes","Pandora",72,2,-2.36,-0.25
+17,3,"Yes","Spotify",148,5,2.49,-1.26
+22,3,"No","YouTube Music",113,1,-0.47,-0.31
+38,1,"No","Spotify",191,1,-1.77,-0.41
+18,10,"Yes","YouTube Music",140,3,3.08,0.44
+14,5,"Yes","Spotify",40,3,-1.7,0.8
+20,3,"Yes","YouTube Music",100,1,-1.65,-0.59
+18,2,"No","Spotify",123,2,-0.25,-0.41
+30,13,"","Spotify",145,5,3.27,-0.1
+31,4,"Yes","I do not use a streaming service.",55,1,1.78,-0.92
+72,6,"Yes","Spotify",77,5,-2.56,0.54
+73,3,"Yes","Pandora",4,2,-1.16,0.15
+16,4,"Yes","Spotify",150,1,1.63,1.23
+19,3,"No","YouTube Music",73,3,-1.88,-0.1
+16,2,"Yes","Spotify",155,1,-0.13,-0.3
+12,2,"Yes","Spotify",NA,1,-0.41,2.03
+15,6,"Yes","Spotify",110,1,2.49,1.31
+14,9,"Yes","Spotify",140,1,2.47,-0.27
+21,1,"No","Spotify",135,2,-2.13,-0.03
+38,1,"Yes","Apple Music",125,5,0.05,-0.98
+23,0.5,"No","Spotify",110,3,1.25,0.13
+16,1,"No","Other streaming service",140,3,0.42,-0.06
+13,6,"Yes","Spotify",112,3,-1.94,0.86
+18,6,"Yes","Spotify",NA,1,-0.96,-0.63
+21,4,"Yes","Spotify",155,3,1.25,-1.27
+17,1.5,"Yes","Spotify",174,1,-0.28,0.26
+14,2,"Yes","Apple Music",78,1,-1.82,0.41
+25,4,"Yes","Spotify",NA,1,-0.73,0.29
+22,3,"Yes","Spotify",174,2,1.79,1.22
+20,4,"Yes","I do not use a streaming service.",120,3,0.27,-1.5
+23,2,"Yes","Spotify",75,1,0.48,-0.01
+61,2,"Yes","Pandora",94,1,-1.97,-0.32
+24,6,"Yes","Spotify",180,1,0.69,1.9
+34,0,"No","Spotify",115,1,0.01,-1.74
+49,1,"No","Spotify",128,3,0.14,-1.32
+33,4,"Yes","I do not use a streaming service.",112,2,-1.8,-0.85
+23,4,"No","YouTube Music",72,1,0.98,-1.28
+34,2,"No","I do not use a streaming service.",100,3,1.86,-2.14
+27,1,"No","Spotify",NA,3,-1.56,-0.37
+54,10,"Yes","YouTube Music",NA,2,-1.87,0.35
+16,10,"No","Spotify",105,2,-3.03,0.11
+23,10,"Yes","I do not use a streaming service.",119,3,0.76,-1.18
+35,4,"No","Spotify",NA,2,-2.5,-0.11
+22,4,"Yes","YouTube Music",137,1,1.02,-0.65
+63,2,"Yes","Spotify",133,2,-0.13,-0.43
+28,1,"No","Spotify",72,1,-1.96,0.69
+58,1,"Yes","YouTube Music",80,4,-2.59,0.1
+67,4,"Yes","Other streaming service",146,2,1.07,-0.17
+70,2,"Yes","I do not use a streaming service.",88,2,0.51,-0.68
+15,2,"Yes","Spotify",102,4,2.99,0.65
+58,3,"Yes","Other streaming service",127,5,0.18,-1.29
+28,1,"Yes","Other streaming service",82,5,-0.05,-1.38
+49,0.5,"No","YouTube Music",114,4,-1.48,0.28
+55,15,"Yes","YouTube Music",156,5,-2.19,-0.22
+14,2,"Yes","Spotify",114,3,-0.92,0.09
+18,3,"Yes","Spotify",120,3,1,-0.82
+25,1,"Yes","Spotify",80,1,0.92,0.4
+60,1,"No","YouTube Music",NA,4,-0.28,-0.99
+19,5,"Yes","Spotify",99,2,0.25,-0.24
+74,1,"No","I do not use a streaming service.",129,2,-1.72,-0.08
+36,1,"Yes","Pandora",131,1,0.19,0.28
+20,3,"No","Spotify",80,1,1.27,0.02
+15,3,"Yes","Spotify",204,3,-2.22,0.31
+19,7,"Yes","I do not use a streaming service.",128,1,-0.35,-0.39
+29,8,"Yes","Spotify",140,2,0.18,-0.74
+24,2,"Yes","Spotify",159,4,0.76,1.39
+18,2,"Yes","Apple Music",104,3,0.26,-1.35
+19,2,"Yes","Spotify",80,3,0.34,-0.71
+28,8,"Yes","Spotify",NA,3,-0.91,0.12
+27,4,"Yes","Other streaming service",135,3,1.06,0.26
+25,5,"No","YouTube Music",NA,1,-0.91,0.12
+60,2,"Yes","Other streaming service",NA,2,0.51,0.43
+51,5,"Yes","I do not use a streaming service.",180,1,-2.32,-0.23
+63,8,"Yes","YouTube Music",70,2,-1.87,0.35
+64,2,"Yes","YouTube Music",NA,1,-1.07,-0.46
+22,2,"Yes","Spotify",NA,1,-1.11,0.07
+24,1,"Yes","YouTube Music",103,3,2.97,0.61
+19,8,"Yes","Spotify",99,3,-0.25,1.74
+56,8,"Yes","Apple Music",117,1,-0.95,-0.22
+20,1,"No","Spotify",102,1,0.63,-1.32
+65,6,"Yes","Apple Music",146,5,-1.24,0.21
+28,3,"No","Spotify",0,5,1.05,-0.62
+18,4,"Yes","I do not use a streaming service.",150,1,2.18,-0.12
+42,2,"Yes","Spotify",85,1,-0.88,-0.44
+22,4,"No","I do not use a streaming service.",NA,2,1.01,0.19
+56,2,"No","Other streaming service",120,5,-2.31,1.5
+15,1,"Yes","Spotify",150,3,-1.13,0.19
+57,2,"Yes","Spotify",174,4,0.37,-1.52
+22,7,"Yes","Apple Music",112,3,1.5,-1.9
+17,5,"Yes","Spotify",180,3,0.33,0.42
+19,3,"Yes","Spotify",121,2,1.6,-0.67
+50,1,"No","I do not use a streaming service.",98,2,-2,-0.9
+24,6,"Yes","Spotify",118,1,1.5,-1.9
+67,2,"No","Apple Music",NA,1,-1.05,0.27
+15,4,"Yes","Spotify",105,4,-0.94,-0.92
+17,2,"Yes","Spotify",122,1,-1.08,-0.04
+32,2,"Yes","YouTube Music",NA,3,-1.64,0.29
+18,1,"Yes","Spotify",165,1,0.52,-0.97
+18,3,"Yes","Spotify",130,3,1.05,0.4
+19,3,"Yes","Spotify",NA,3,-1.93,0.58
+18,2,"No","Spotify",115,1,-0.3,0.83
+34,3,"Yes","Spotify",95,1,-3.03,0.11
+18,3,"Yes","YouTube Music",150,3,-1.01,-0.41
+18,2,"Yes","Spotify",97,4,-1.91,-0.27
+22,2,"Yes","I do not use a streaming service.",NA,4,-0.85,0.14
+18,2,"Yes","Spotify",NA,3,-0.46,-0.78
+25,4,"Yes","I do not use a streaming service.",150,3,1.6,-0.67
+21,1,"","Spotify",NA,3,-0.31,0.8
+24,7,"Yes","Spotify",137,1,3.4,1.02
+16,3,"Yes","Spotify",174,5,1.53,1.58
+18,3,"No","Spotify",210,5,1.76,0.07
+18,4,"Yes","Spotify",129,3,-0.09,1.45
+68,1,"Yes","Pandora",8,4,2.26,-2.04
+16,7,"Yes","Spotify",999999999,1,0.97,-0.7
+53,4,"Yes","Pandora",153,2,-2.83,0.16
+29,4,"Yes","Spotify",120,5,1.09,0.57
+29,2,"Yes","Spotify",NA,3,2.9,0.98
+18,4,"Yes","Spotify",169,3,-1.41,0.94
+22,5,"Yes","Spotify",138,3,-2.69,0.44
+19,6,"Yes","Other streaming service",124,4,-0.74,-0.32
+13,1,"Yes","YouTube Music",NA,3,-1.09,-0.63
+26,1,"No","I do not use a streaming service.",192,3,-1.1,-0.07
+14,3,"Yes","Spotify",76,3,-1.1,-0.95
+27,1,"Yes","Spotify",119,3,0,0.55
+59,1,"No","Other streaming service",79,4,-2.69,0.44
+30,8,"Yes","Spotify",112,2,1.7,1.14
+27,1,"Yes","Spotify",130,3,-0.13,1.84
+18,1,"No","Apple Music",116,3,-2.19,-0.22
+40,5,"Yes","Spotify",174,1,-2.28,0.54
+23,2,"Yes","Spotify",171,1,1.02,-0.65
+29,2,"Yes","Other streaming service",70,3,2.01,-0.7
+21,8,"Yes","Spotify",162,1,1.55,0.73
+32,8,"Yes","Spotify",101,3,1.35,1.23
+22,8,"Yes","YouTube Music",110,1,2.29,0.27
+17,12,"Yes","Spotify",172,4,-0.45,-0.16
+18,6,"Yes","Spotify",90,3,-1.81,1.11
+18,4,"Yes","Spotify",135,4,-2.63,0.21
+24,8,"Yes","Spotify",81,5,-1.68,-0.61
+46,1,"No","I do not use a streaming service.",120,2,-2.89,-0.03
+18,2,"Yes","Spotify",90,4,0.15,1.38
+16,3,"Yes","Spotify",115,3,-1.36,-0.64
+19,0,"No","I do not use a streaming service.",NA,1,-3.03,0.11
+20,2,"Yes","Spotify",NA,3,-0.14,0.54
+21,0.1,"Yes","Other streaming service",NA,4,-0.13,-0.3
+56,2,"Yes","I do not use a streaming service.",220,1,-0.59,1.97
+21,12,"Yes","Spotify",160,1,1.78,0.61
+20,1,"Yes","Spotify",121,1,-1.62,-0.42
+21,1,"Yes","Apple Music",105,1,-0.4,2.59
+20,2,"Yes","Spotify",148,1,1.04,-1.64
+17,3,"Yes","Spotify",120,1,-0.47,-0.2
+24,1,"No","YouTube Music",122,1,-1.92,-0.13
+26,3,"Yes","Spotify",90,5,-0.38,-0.56
+17,3,"Yes","YouTube Music",122,1,-0.4,-0.82
+16,5,"Yes","Spotify",129,1,0.28,-1.18
+27,8,"Yes","Spotify",132,1,-0.08,-1.54
+48,5,"Yes","I do not use a streaming service.",NA,1,-1.88,-0.1
+19,3,"Yes","Spotify",115,3,0.16,0.25
+21,4,"Yes","YouTube Music",137,2,-0.06,-0.12
+21,1,"Yes","I do not use a streaming service.",92,1,-1.71,1.65
+20,1,"No","Spotify",130,1,0.89,-1.03
+21,2,"Yes","YouTube Music",NA,1,-2.27,-0.03
+22,6,"Yes","Spotify",63,3,1.31,-0.51
+22,2,"No","Spotify",119,1,1.33,1.93
+31,1,"Yes","Spotify",NA,1,2.92,-0.43
+20,4,"Yes","YouTube Music",180,2,-0.65,1.64
+42,2,"Yes","Spotify",85,1,0.99,-0.4
+26,2,"Yes","Spotify",128,2,-1.84,0.8
+23,6,"Yes","Spotify",92,2,0.44,-0.49
+30,3,"Yes","Apple Music",121,3,1.32,0.79
+31,2,"Yes","Spotify",155,1,1.43,1.04
+16,4,"Yes","Other streaming service",624,3,-0.38,0.15
+34,2,"No","YouTube Music",136,1,1.79,-0.36
+21,2,"Yes","YouTube Music",121,1,1.17,0.38
+27,3,"Yes","YouTube Music",113,3,-1.11,0.49
+37,2,"Yes","Spotify",100,1,2.15,-1.59
+22,4,"Yes","Spotify",93,1,1.41,0.29
+43,0,"No","I do not use a streaming service.",NA,1,-2.18,-0.37
+24,12,"Yes","I do not use a streaming service.",136,1,1.34,1.47
+21,0.5,"No","I do not use a streaming service.",108,1,0.93,3
+28,1,"Yes","I do not use a streaming service.",147,1,-1.87,0.35
+23,3,"Yes","YouTube Music",93,1,-0.62,-0.95
+20,12,"No","Apple Music",98,2,0.48,-1.04
+32,1,"Yes","Spotify",218,1,0.65,-1.57
+20,2,"Yes","Other streaming service",135,1,-2.27,-0.03
+15,3,"Yes","Spotify",132,1,-0.95,-0.77
+26,1,"Yes","Spotify",NA,1,-1.06,1.4
+20,1,"Yes","Spotify",120,4,0.14,-0.2
+21,0.5,"Yes","YouTube Music",NA,3,-0.75,-0.3
+21,11,"Yes","Spotify",125,3,-0.06,-1.23
+27,10,"Yes","Spotify",132,1,1.3,-1.68
+17,5,"Yes","Spotify",110,1,1.25,0.74
+21,1.5,"Yes","Spotify",110,1,-1.14,-0.42
+17,2,"Yes","Spotify",116,5,-0.35,0.35
+21,3,"No","Spotify",145,3,1.8,0.09
+17,2,"No","YouTube Music",NA,1,1.08,0.8
+36,3,"Yes","YouTube Music",105,2,-2.68,0.02
+18,4,"No","Spotify",80,4,1,1.04
+18,7,"Yes","Spotify",NA,3,-1.81,0.97
+18,1,"Yes","I do not use a streaming service.",120,2,-1.91,1.6
+18,1,"No","I do not use a streaming service.",117,1,-1.62,0.46
+20,6,"Yes","Spotify",89,3,-1.9,0.04
+19,3,"Yes","Spotify",115,3,-0.7,-0.15
+17,4,"Yes","Spotify",144,3,-1.04,0.73
+19,2,"Yes","Spotify",145,1,0.75,1.07
+20,5,"Yes","Spotify",128,3,1.66,1.67
+16,9,"Yes","Spotify",130,1,3.41,0.18
+30,1,"Yes","YouTube Music",115,1,1.8,-0.33
+37,2,"Yes","Spotify",186,2,-0.36,-0.8
+23,1,"Yes","Spotify",NA,3,0.39,0.75
+26,1,"No","Spotify",120,2,-1.03,1.71
+18,3,"Yes","Spotify",140,3,-0.33,-0.35
+35,4,"Yes","Spotify",90,5,1.43,0.01
+23,3,"Yes","I do not use a streaming service.",NA,5,0.19,-0.28
+17,1,"No","Spotify",137,1,0.82,-0.99
+23,2,"No","Spotify",NA,1,1,-1.37
+17,1,"Yes","Spotify",70,1,0.74,-0.6
+22,3,"Yes","Spotify",150,1,2.82,0.75
+17,5,"Yes","Spotify",168,3,1.1,0.28
+19,5,"Yes","Spotify",163,2,0.58,-0.5
+19,4,"Yes","Spotify",140,3,-0.04,-0.51
+16,6,"Yes","Spotify",105,5,2.57,1.67
+19,6,"Yes","Spotify",78,3,0.44,-1.47
+18,18,"Yes","Apple Music",90,3,2.4,1.64
+26,1,"Yes","YouTube Music",136,1,-3.03,0.11
+14,7,"Yes","Other streaming service",108,2,-0.64,0.51
+21,0.5,"No","I do not use a streaming service.",95,3,-1.16,-0.12
+21,2,"Yes","Spotify",147,3,0.91,0.82
+19,5,"Yes","Spotify",170,1,-1.65,-0.16
+29,2,"Yes","YouTube Music",98,3,-1.26,1.07

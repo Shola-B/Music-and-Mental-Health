@@ -1,0 +1,53 @@
+---
+title: "README"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+This repository was build for the final project for MIDS 203 - Section 7
+Team. The team includes - Kala Fejzo - Shola Able-Thomas - Emmanuel
+Damas - Hope Tadsen
+
+This project is the data exploration and modeling set of work based on a
+data set with variables representing mental health scores across genres
+and other variables. The data was collected through random respondents
+to a Reddit post and therefore can be assumed to be IID though this may
+seem a flimsy argument considering the lack of principles or rules
+around who has access to or uses that website.
+
+This project examines the relationship between daily music listening
+habits and mental health outcomes. The research question asks: how do
+hours of music listened to per day (X) influence an individual’s mental
+health score (Y)? The null hypothesis (H₀) is that hours of music per
+day do not impact mental health, while the alternative hypothesis (Hₐ)
+is that increased music listening positively impacts mental health. This
+question is relevant in the broader context of growing interest in
+digital media’s influence on mental well-being, especially as streaming
+platforms, such as Spotify and Apple Music, become increasingly more
+popular in everyday life. The primary audience for this research
+includes streaming platforms and their marketing teams who can benefit
+from understanding how user engagement with music relates to mental
+health. Insights from this analysis could inform platform design,
+personalized recommendations, and targeted marketing strategies that
+emphasize wellness benefits. This area has been explored in the past,
+one of which discusses the impact music has on immunity. This was
+written by Lavinia Rebecchini, PhD, and she argued that music is an
+integral part of development and “can positively influence physiological
+processes that enhance physical and mental wellbeing.” Given these
+previous works we endeavor to better understand the relationship between
+music and mental health indicators. The dataset (named MxMH) was
+collected using an online google form survey, which was advertised
+widely using physical pamphlets and on social media platforms such as
+Reddit and Discord, between July 27th - November 11th, 2022. There were
+no restrictions placed on age or location. The form utilized a
+self-reported mental health scale which scored Depression, Anxiety,
+Insomnia and OCD on a range from 0 (I do not experience this) to 10 (I
+experience this regularly, or to an extreme). The study aims to evaluate
+the relationship between the daily number of hours listened to music and
+the combined mental health score. If a relationship truly exists, music
+listening could be categorized into separate genres, mainly Classical,
+Country, EDM, Folk, Gospel, Hip-Hop, Jazz, K-pop, Latin, Lofi, Metal,
+Pop, R&B, Rap, Rock and Video game, with a secondary aim to further
+assess the impact of each genre on individual mental health states.

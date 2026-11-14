@@ -1,0 +1,1404 @@
+---
+title: "Final Statistics Project"
+format: html
+output: 'pdf_document'
+editor: visual
+Authors: Hope, Shola, Emmanuel, Kala
+fontsize: 11pt
+geometry: margin=.85in
+---
+
+# Mental Health & Music
+
+Assumptions: Self reported study data may not be fully representative of the population and may have un-measured variables leading to unknown bias in the data
+
+```{r load unit packages, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+library(tidyverse)
+library(lmtest)
+library(sandwich)
+library(patchwork)
+library(testthat)
+library(ca)
+library(dplyr)
+library(stargazer)
+library(ggrepel)
+library(factoextra)
+library(cluster)
+library(RColorBrewer)
+library(here)
+
+theme_set(theme_minimal())
+options(stargazer.header = FALSE)
+knitr::opts_knit$set(root.dir = here::here())
+```
+
+## Load in Data
+
+```{r}
+# 1. Set the working directory to the folder containing your file
+#setwd("~/203-FinalProject-MusicandMentalHealth")
+
+# 2. Load the CSV file into a variable named 'my_data'
+my_data <- read.csv("data/mxmh_survey_results.csv", header = TRUE)
+my_data = as.data.frame(my_data)
+
+head(my_data)
+```
+
+## Summary and Details
+
+```{r}
+head(my_data) #View the first 6 rows.
+dim(my_data) #Check the number of rows and columns.
+```
+
+## Data Types & Structure
+
+```{r}
+colnames(my_data) #List all column names.
+summary(my_data) #Get basic statistics for all variables.
+str(my_data, vec.len=2)
+```
+
+## Missing Values Analysis
+
+```{r}
+colSums(is.na(my_data))
+```
+
+## Modify Column Names
+
+```{r}
+my_data <- my_data %>%
+  rename( Age = Age,
+          Primarystreamingservice = Primary.streaming.service,
+          Hoursperday = Hours.per.day,
+          Whileworking = While.working,
+          Instrumentalist = Instrumentalist,
+          Composer = Composer,
+          Favgenre = Fav.genre,
+          Exploratory = Exploratory,
+          Foreignlanguages = Foreign.languages,
+          BPM = BPM,
+          Frequency_Classical = Frequency..Classical.,
+          Frequency_Country = Frequency..Country.,
+          Frequency_EDM = Frequency..EDM.,
+          Frequency_Folk = Frequency..Folk.,
+          Frequency_Gospel = Frequency..Gospel.,
+          Frequency_Hiphop = Frequency..Hip.hop.,
+          Frequency_Jazz = Frequency..Jazz.,
+          Frequency_Kpop = Frequency..K.pop.,
+          Frequency_Latin = Frequency..Latin.,
+          Frequency_Lofi = Frequency..Lofi.,
+          Frequency_Metal = Frequency..Metal.,
+          Frequency_Pop = Frequency..Pop.,
+          Frequency_RB = Frequency..R.B.,
+          Frequency_Rap = Frequency..Rap.,
+          Frequency_Rock = Frequency..Rock.,
+          Frequency_Videogamemusic = Frequency..Video.game.music.,
+          Anxiety = Anxiety,
+          Depression = Depression,
+          Insomnia = Insomnia,
+          OCD = OCD,
+          Musiceffects = Music.effects,
+          Permissions = Permissions) 
+
+colnames(my_data) #List all column names.
+
+```
+
+## Splitting The Data
+
+```{r}
+# Set seed for reproducibility
+set.seed(42)
+
+# Randomly assign each row to exploration (1) or confirmation (2)
+# 30% exploration = 1, 70% confirmation = 2
+my_data_int <- my_data %>%
+  mutate(
+    UsedForTesting = sample(
+      c(1, 0),
+      size = n(),
+      replace = TRUE,
+      prob = c(0.30, 0.70)
+    )
+  )
+
+# Verify the split
+table(my_data_int$UsedForTesting)
+prop.table(table(my_data_int$UsedForTesting))
+```
+
+### Creating the split for Testing & Validation
+
+#### Testing Data Set (Exploration - 30%)
+
+```{r}
+my_data_testing <- my_data_int %>%
+  filter(UsedForTesting == 1)
+
+# Verify
+nrow(my_data_testing)
+```
+
+#### Validation Data Set (Confirmation - 70%)
+
+```{r}
+my_data_validation <- my_data_int %>%
+  filter(UsedForTesting == 0)
+```
+
+#### Saving The Testing and Validation File To Workspace
+
+```{r}
+write.csv(my_data_testing, "data/my_data_testing.csv", row.names = FALSE)
+
+write.csv(my_data_validation, "data/my_data_validation.csv", row.names = FALSE)
+
+```
+
+## Descriptive Summaries of informative variables
+
+```{r}
+
+my_data_testing <- read.csv("data/my_data_testing.csv", header = TRUE)
+
+my_data_testing$Favgenre
+#summary for genre
+table(my_data_testing$Favgenre)
+
+#summary for age
+summary(my_data_testing$Age)
+
+#summary for Music listening hours
+summary(my_data_testing$Hoursperday)
+
+#summary for BPM
+summary(my_data_testing$BPM)
+
+#plot Genre
+ggplot(my_data_testing, aes(x = Favgenre)) + geom_bar(fill = "steelblue")+
+  labs(
+    title = "Favorite Genre Distribution",
+    x = "Genre",
+    y = "Count") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+#plot Music Listening Hours
+plot(my_data_testing$Hoursperday,
+     main = "Distribution of Music Listening Hours", 
+     xlab = "Index", 
+     ylab = "Hours") # Scatter plot or line plot
+hist(my_data_testing$Hoursperday,
+     main = "Distribution of Music Listening Hours", 
+     xlab = "Hours", 
+     ylab = "Count")# Histogram for distribution
+
+#plot Age
+plot(my_data_testing$Age, main = "Distribution of Age", 
+     xlab = "Index", 
+     ylab = "Age") # Scatter plot or line plot
+hist(my_data_testing$Age, main = "Distribution of Age", 
+     xlab = "Count", 
+     ylab = "Age") # Histogram for distribution
+
+#plot BPM
+plot(my_data_testing$BPM, main = "Distribution of BPM", 
+     xlab = "Index", 
+     ylab = "BPM") # Scatter plot or line plot
+hist(my_data_testing$BPM, main = "Distribution of BPM", 
+     xlab = "Count", 
+     ylab = "BPM")# Histogram for distribution
+```
+
+\newpage
+
+## Principle Component Analysis
+
+```{r}
+# Select the 4 mental health variables
+mh_vars <- my_data_testing %>%
+  select(Anxiety, Depression, Insomnia, OCD) %>%
+  drop_na()  # PCA requires complete cases
+
+# Run PCA with scaling (important since variables are on same 0-10 scale,
+
+# but scaling is still best practice)
+
+pca_result <- prcomp(mh_vars, center = TRUE, scale. = TRUE)
+
+# Summary: see how much variance each PC explains
+
+summary(pca_result)
+
+# Loadings: how each variable contributes to each PC
+pca_result$rotation
+# Scree plot — visualize variance explained by each component
+screeplot(pca_result, type = "lines", main = "Scree Plot - Mental Health PCA")
+abline(h = 1, col = "red", lty = 2)  # Kaiser criterion: keep PCs with eigenvalue > 1
+```
+
+### Screeplot for Principal Components in Mental Health Score
+
+```{r}
+#Formatted scree plot with variances
+HIGHLIGHT <- "#e63946"
+theme_ref <- theme_bw(base_family = "sans") +
+  theme(
+    plot.title       = element_text(face = "bold", size = 11),
+    plot.subtitle    = element_text(size = 9, color = "grey40"),
+    axis.text.x      = element_text(angle = 45, hjust = 1, size = 7),
+    axis.text.y      = element_text(size = 8),
+    panel.grid.minor = element_blank()
+  )
+
+
+total_variance <- sum(pca_result$sdev^2)
+scree_df <- data.frame(
+  PC         = paste0("PC", 1:min(4, length(pca_result$sdev))),
+  eigenvalue = round(pca_result$sdev[1:min(4, length(pca_result$sdev))]^2, 3)
+) %>%
+  mutate(
+    cumulative_pct = round(cumsum(eigenvalue) / total_variance * 100, 1),
+    PC             = fct_inorder(PC)
+  )
+
+screeplot <- ggplot(scree_df, aes(x = PC)) +
+  #Eigenvalue bars
+  geom_col(aes(y = eigenvalue), fill = "#457b9d", width = 0.6) +
+  geom_text(aes(y = eigenvalue, label = sprintf("%.2f", eigenvalue)),
+            vjust = -0.5, size = 3) +
+  #Cumulative variance line
+  geom_line(aes(y = cumulative_pct * max(scree_df$eigenvalue) / 100,
+                group = 1), color = HIGHLIGHT,
+            linewidth = 1, linetype = "dashed") +
+  geom_point(aes(y = cumulative_pct * max(scree_df$eigenvalue) / 100),
+             color = HIGHLIGHT, size = 3) +
+  geom_text(aes(y = cumulative_pct * max(scree_df$eigenvalue) / 100,
+                label = sprintf("%.1f%%", cumulative_pct)),
+            vjust = -0.8, hjust = 0.5, size = 2.8, color = HIGHLIGHT) +
+  #Kaiser criterion line
+  geom_hline(yintercept = 1, color = "red", linetype = "dotted",
+             linewidth = 1) +
+  annotate("text", x = Inf, y = 1.1, hjust = 1.1,
+           label = "Kaiser criterion (lambda = 1)",
+           color = "red", size = 3, fontface = "italic") +
+  #Dual axes
+  scale_y_continuous(
+    name     = "Eigenvalue (lambda)",
+    limits = c(0, max(scree_df$eigenvalue) * 1.15),
+    sec.axis = sec_axis(
+      transform = ~ . / max(scree_df$eigenvalue) * 100,
+      name = "Cumulative Variance (%)",
+      breaks    = seq(0, 100, by = 20),
+      labels    = function(x) sprintf("%.0f%%", x)
+    )
+  ) +
+  labs(
+    title    = "Scree Plot for Mental Health Scores",
+    subtitle = "Bars = eigenvalues (lambda) |\
+    dashed line = cumulative variance |\
+    dotted line = Kaiser criterion (lambda = 1)",
+    x        = "Principal Component"
+  ) +
+  theme_ref +
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    #axis.title.y.right = element_text(color = HIGHLIGHT),
+    axis.text.y.right  = element_text(color = HIGHLIGHT)
+    )
+screeplot
+```
+
+\newpage
+
+## Extract PC1 & PC2 scores for each person as the Mental Health Score
+
+```{r}
+
+# PC1 captures the most shared variance across all 4 conditions
+# PC2 captures the contrast between conditions.
+# For example high OCD/Anxiety vs low Insomnia/Depression or vice versa.
+
+# Add PC1 scores back to the data (only for complete cases)
+complete_idx <- complete.cases(my_data_testing %>% select(
+  Anxiety, Depression, Insomnia, OCD))
+
+# Add PC1 — general mental health burden (most shared variance)
+my_data_testing$MentalHealthScore_PC1 <- NA
+my_data_testing$MentalHealthScore_PC1[complete_idx] <- round(pca_result$x[, 1], 2)
+
+# Add PC2 — secondary dimension (captures variance PC1 missed)
+my_data_testing$MentalHealthScore_PC2 <- NA
+my_data_testing$MentalHealthScore_PC2[complete_idx] <- round(pca_result$x[, 2], 2)
+
+# Summary of both scores
+summary(my_data_testing$MentalHealthScore_PC1)
+summary(my_data_testing$MentalHealthScore_PC2)
+
+# Hist plot — visualization of mental health scores
+hist(my_data_testing$MentalHealthScore_PC1, 
+     main = "Distribution of Mental Health Score (PC1)",
+     xlab = "Mental Health Score", col = "steelblue")
+hist(my_data_testing$MentalHealthScore_PC2, 
+     main = "Distribution of Mental Health Score (PC2)",
+     xlab = "Mental Health Score", col = "steelblue")
+```
+
+```{r}
+# Sanity Check 
+#my_data_testing %>%
+#  select(Anxiety, Depression, Insomnia, OCD, MentalHealthScore_PC1, #MentalHealthScore_PC2)
+
+str(my_data_testing, vec.len=2)
+```
+
+```{r}
+write.csv(my_data_testing, "data/my_data_testing.csv", row.names = FALSE)
+```
+
+\newpage
+
+## Multiple Correspondence Analysis
+
+```{r}
+# Select genre variables
+genre_vars <- my_data_testing %>%
+  select(starts_with("Frequency_")) %>%
+  mutate(across(everything(), as.factor))
+
+# Create indicator matrix, each category becomes a 0/1 column
+X <- model.matrix(~ . - 1, data = genre_vars)
+
+# Apply Correspondence Analysis on matrix
+ca_result <- ca(X)
+
+# Plot full CA results
+plot(ca_result, main = "Correspondence Analysis of Genre Preferences")
+
+# Extract category coordinates
+genre_coords <- as.data.frame(ca_result$colcoord)
+genre_coords$category <- rownames(genre_coords)
+
+# Clean category labels into genre names
+# Removes "Frequency_" and the response levels
+genre_coords$genre <- gsub(
+  "Frequency_|Never|Rarely|Sometimes|Very frequently",
+  "", genre_coords$category)
+genre_coords$genre <- trimws(genre_coords$genre)
+
+# Average coordinates per genre
+# Gives one point per genre instead of one point per genre-response category
+genre_avg <- genre_coords %>%
+  group_by(genre) %>%
+  summarise(
+    Dim1 = mean(Dim1, na.rm = TRUE),
+    Dim2 = mean(Dim2, na.rm = TRUE),
+    Dim3 = mean(Dim3, na.rm = TRUE),
+    Dim4 = mean(Dim4, na.rm = TRUE),
+    Dim5 = mean(Dim5, na.rm = TRUE)
+  )
+
+# Compute distances between genres using the first 5 dimensions
+dist_mat <- dist(genre_avg[, c("Dim1", "Dim2", "Dim3", "Dim4", "Dim5")])
+
+# Perform hierarchical clustering
+hc <- hclust(dist_mat, method = "ward.D2")
+
+# Plot dendrogram
+plot(hc, main = "Genre Clustering (Hierarchical)")
+
+# Ran multiple tests with different k values (bc clustering was weak) 
+# found that cutting the tree into 5 groups made the most sense
+genre_avg$group <- cutree(hc, k = 5)
+
+# Step 11: Final output
+genre_final <- genre_avg %>%
+  select(genre, group)
+
+genre_final
+
+# Step 12: Check group sizes
+table(genre_final$group)
+
+# Step 13: Add readable labels
+genre_final$group_name <- case_when(
+  genre_final$group == 1 ~ "Group 1",
+  genre_final$group == 2 ~ "Group 2",
+  genre_final$group == 3 ~ "Group 3",
+  genre_final$group == 4 ~ "Group 4",
+  genre_final$group == 5 ~ "Group 5"
+  )
+
+genre_final
+
+# Make a clean plot with one point per genre,
+# so it's much easier to interpret than the full CA plot
+plot(genre_avg$Dim1, genre_avg$Dim2,
+     col = genre_avg$group,
+     pch = 19,
+     xlab = "Dimension 1",
+     ylab = "Dimension 2",
+     main = "Genre Clusters (Clean View)")
+
+text(genre_avg$Dim1, genre_avg$Dim2,
+     labels = genre_avg$genre,
+     pos = 3,
+     cex = 0.8)
+
+# Inspect genres by cluster
+genre_final %>%
+  arrange(group, genre)
+
+# View genres grouped by cluster
+genre_final %>%
+  group_by(group) %>%
+  summarise(genres = paste(genre, collapse = ", "))
+
+split(genre_final$genre, genre_final$group)
+
+# Convert frequency categories to numeric
+freq_data <- my_data_testing %>%
+  select(starts_with("Frequency_")) %>%
+  mutate(across(everything(), ~ case_when(
+    . == "Never" ~ 0,
+    . == "Rarely" ~ 1,
+    . == "Sometimes" ~ 2,
+    . == "Very frequently" ~ 3,
+    TRUE ~ NA_real_
+  )))
+
+# Map clustered genres to their frequency column names
+genre_map <- genre_final %>%
+  mutate(freq_col = paste0("Frequency_", genre))
+
+# Compute average score per group for each person
+group_scores <- sapply(sort(unique(genre_map$group)), function(g) {
+  cols <- genre_map$freq_col[genre_map$group == g]
+  cols <- cols[cols %in% names(freq_data)]
+  
+  rowMeans(freq_data[, cols, drop = FALSE], na.rm = TRUE)
+})
+
+# Assign each person to the group they listen to most
+my_data_testing$GenreGroup <- apply(group_scores, 1, function(x) {
+  if (all(is.na(x))) NA else which.max(x)
+})
+
+# Convert to factor
+my_data_testing$GenreGroup <- as.factor(my_data_testing$GenreGroup)
+
+# Check result
+# my_data_testing
+```
+
+\newpage
+
+## Multiple Component Analysis Improved
+
+```{r}
+#Imporovements to Multiple Component Analysis
+
+my_data_testing <- read.csv("data/my_data_testing.csv", header = TRUE)
+
+# Select genre variables
+mca_genre_vars <- my_data_testing %>%
+  select(starts_with("Frequency_")) %>%
+  mutate(across(everything(), as.factor))
+
+# Run MCA
+mca_result <- mjca(mca_genre_vars)
+#summary(mca_result)
+
+# Extract eigenvalues / % inertia explained
+eig_vals <- mca_result$inertia.e  # or ca_result$sv^2 for raw ca()
+pct_inertia <- eig_vals / sum(eig_vals) * 100
+#cumsum(pct_inertia)
+
+# Scree plot
+# Only retain dimensions above the mean inertia line.
+plot(pct_inertia, type = "b", 
+     xlab = "Dimension", ylab = "% Inertia Explained",
+     main = "Scree Plot — MCA Dimensions")
+abline(h = mean(pct_inertia), col = "red", lty = 2)  # Kaiser-like rule
+
+# Automatically select dimensions that lie above the mean inertia threshold.
+n_dims <- (length(which(pct_inertia > mean(pct_inertia))))
+
+#Modified Screeplot
+mca_screedf <- data.frame(
+  Dimension = seq_along(pct_inertia),
+  Pct       = pct_inertia
+)
+
+#Plot Dimension contributions
+ggplot(mca_screedf, aes(x = Dimension, y = Pct)) +
+  geom_line(colour = "#4A90D9", linewidth = 0.8) +
+  geom_point(
+    aes(fill = Dimension <= n_dims),
+    shape = 21, size = 3, colour = "white", stroke = 0.8
+  ) +
+  scale_fill_manual(
+    name   = "",
+    values = c("TRUE" = "#4A90D9", "FALSE" = "#AAAAAA"),
+    labels = c("TRUE" = "Retained", "FALSE" = "Discarded"),
+  ) +
+  geom_hline(
+    yintercept = mean(pct_inertia),
+    linetype = "dashed", colour = "#E05C5C", linewidth = 0.7
+  ) +
+  annotate("text",
+    x = max(mca_screedf$Dimension) * 0.75,
+    y = mean(pct_inertia) + 1.5,
+    label = sprintf("Mean inertia threshold (%.1f%%)", mean(pct_inertia)),
+    colour = "#E05C5C", size = 3.2
+  ) +
+  labs(
+    title    = "Scree Plot — MCA Dimensions",
+    subtitle = sprintf(
+      "Retaining %d dimension%s above mean inertia", n_dims,
+      ifelse(n_dims == 1, "", "s")),
+    x        = "Dimensions",
+    y        = "% Inertia Explained"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title    = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5, colour = "grey40"),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank()
+  )
+
+
+#Pair each expanded variable name with its corresponding level name
+category_names <- paste(mca_result$levelnames, sep = ".")
+
+# Extract Genre Coordinates
+mca_genre_coords <- as.data.frame(mca_result$colcoord[, 1:n_dims])
+colnames(mca_genre_coords) <- paste0("Dim", 1:n_dims)
+mca_genre_coords$category <- category_names
+
+# Split on the colon to get genre and response level as separate columns
+mca_genre_coords <- mca_genre_coords %>%
+  mutate(
+    # Everything before the colon, minus the "Frequency_" prefix
+    genre = gsub("^Frequency_", "", category) %>%
+            gsub(":.*$", "", .),      # drop the colon and everything after it
+    
+    # Everything after the colon — the response level
+    frequency = gsub("^.*:", "", category)
+)
+
+# Build a named lookup vector — category label maps to its mass.
+# mca_result$levelnames gives names like "Frequency_Jazz:Never"
+# mca_result$colmass gives the proportion of all responses that fell in each category
+mass_lookup <- setNames(mca_result$colmass, mca_result$levelnames)
+
+# Attach mass to your coords data frame by matching on the category column.
+# This is safer than positional assignment (mca_genre_coords$mass <- col_masses)
+# because it doesn't assume your rows are still in the original MCA order.
+mca_genre_coords <- mca_genre_coords %>%
+  mutate(mass = mass_lookup[category])
+
+
+# Average per genre (centroid)
+# Collapse the 4 response-level points per genre into one centroid
+mca_genre_avg_weighted <- mca_genre_coords %>%
+  group_by(genre) %>%
+  summarise(across(starts_with("Dim"), mean, na.rm = TRUE))
+                   #~ weighted.mean(.x, w = mass, na.rm = TRUE)))
+
+
+# WEIGHTED CLUSTERING
+# Weight each dimension by its share of variance
+# so Dim1 (44%) has more pull than Dim3 (10%)
+# Weight dimensions by variance when clustering
+# This stops Dim5 having equal pull to Dim1 when computing distances
+# Get % variance per dimension
+pct_var <- eig_vals / sum(eig_vals)
+
+# Scale coordinates by sqrt of variance explained before clustering
+weighted_coords <- sweep(
+  mca_genre_avg_weighted[, paste0("Dim", 1:n_dims)],
+  MARGIN = 2,
+  STATS = sqrt(pct_var[1:n_dims]),
+  FUN = "*"
+  )
+
+# Attach genre names as row labels so the dendrogram is readable
+rownames(weighted_coords) <- mca_genre_avg_weighted$genre
+# Compute pairwise distances between genre centroids in the scaled space
+dist_mat <- dist(weighted_coords)
+# Ward's D2 minimises total within-cluster variance at each merge step,
+# which tends to produce compact, evenly-sized clusters — well suited here
+hc <- hclust(dist_mat, method = "ward.D2")
+hc$labels
+
+# Plot dendrogram
+plot(hc, 
+     main = "Genre Clustering (Variance-Weighted MCA Centroids)",
+     xlab  = "Genre",
+     ylab  = "Ward Linkage Distance",
+     sub   = "")
+
+# Use data-driven k selection instead of manual trial
+# Pick the k with the highest silhouette width.
+# Silhouette > 0.5 indicates strong structure;
+# 0.25–0.5 is moderate. If all scores are low,
+# it's a signal that the genres don't cluster cleanly
+# and you may want to reconsider the approach entirely
+
+
+# Silhouette analysis across multiple k values
+sil_scores <- sapply(2:10, function(k) {
+  cut <- cutree(hc, k = k)
+  mean(silhouette(cut, dist_mat)[, 3])
+})
+
+best_k <- which.max(sil_scores) + 1
+
+plot(2:10, sil_scores, type = "b",
+     xlab = "Number of clusters (k)", ylab = "Mean Silhouette Width",
+     main = "Silhouette Analysis for Optimal k")
+
+# Confirmed k = 4 is optimal
+
+k_range    <- 2:10
+sil_scores <- sapply(k_range, function(k) {
+  mean(silhouette(cutree(hc, k), dist_mat)[, 3])
+})
+
+sil_df <- data.frame(k = k_range, silhouette = sil_scores)
+
+#plot of silhouette analysis
+ggplot(sil_df, aes(x = k, y = silhouette)) +
+  geom_line(colour = "#4A90D9", linewidth = 0.8) +
+  geom_point(
+    aes(fill = k == which.max(silhouette) + 1),
+    shape = 21, size = 4, colour = "white", stroke = 0.8
+  ) +
+  scale_fill_manual(
+    values = c("TRUE" = "#E05C5C", "FALSE" = "#4A90D9"), guide = "none") +
+  annotate("text",
+    x     = which.max(sil_scores) + 1,   # k = 3
+    y     = max(sil_scores) + 0.008,
+    label = paste0("Optimal k = ", which.max(sil_scores) + 1),
+    colour = "#E05C5C", fontface = "bold", size = 3.5
+  ) +
+  scale_x_continuous(breaks = k_range) +
+  labs(
+    title    = "Silhouette Analysis for Optimal k",
+    subtitle = "Higher mean silhouette width = more coherent clusters",
+    x        = "Number of Clusters (k)",
+    y        = "Mean Silhouette Width"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title    = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5, colour = "grey40"),
+    panel.grid.minor = element_blank()
+  )
+
+#Set your preferred number of genre groups
+best_k = 5
+mca_genre_avg_weighted$group <- cutree(hc, k = best_k)
+
+# Genre Groups: dynamically select columns from mca_genre_avg
+mca_genre_final <- mca_genre_avg_weighted %>%
+  select(genre, group, all_of(paste0("Dim", 1:n_dims)))
+
+#Give groups meaningful names based on their genres
+#Instead of "Group 1" through "Group 5"
+mca_genre_final %>%
+  arrange(group, genre) %>%
+  group_by(group) %>%
+  summarise(genres = paste(sort(genre), collapse = ", ")) %>%
+  print()
+
+# Then name groups based on what you see, e.g.:
+mca_group_labels <- c(
+  "1" = "Classical/Pop/Rock",
+  "2" = "Country/Metal", 
+  "3" = "Urban/Jazz",
+  "4" = "Gospel",
+  "5" = "Latin/Kpop"
+#  "6" = "Pop",
+#  "7" = "Rock"
+)
+
+mca_genre_final$group_name <- mca_group_labels[as.character(mca_genre_final$group)]
+
+colour_pool <- c(
+  "1" = "#4A90D9",   # Blue
+  "2" = "#E05C5C",   # Red
+  "3" = "#2ECC71",   # Green
+  "4" = "orange",    # Orange
+  "5" = "#9B59B6",   # Purple
+  "6" = "pink",      # Amber
+  "7" = "#b0bf1a",   # gray
+  "8" = "gray"       # Teal
+)
+
+colour_palette <- setNames(
+  colour_pool[1:best_k],
+  as.character(1:best_k)
+)
+
+# cutree() returns a named vector where names are genre names
+# (because we set rownames(weighted_coords) <- genre_avg$genre earlier in the pipeline).
+# Subsetting by leaf_labels reorders it to match the dendrogram's display order.
+
+leaf_labels <- hc$labels[order.dendrogram(as.dendrogram(hc))]
+leaf_groups <- cutree(hc, k = best_k)[leaf_labels]
+
+annotation_df <- data.frame(
+  genre      = leaf_labels,
+  x_pos      = seq_along(leaf_labels),
+  group      = leaf_groups,
+  group_name = mca_group_labels[as.character(leaf_groups)]
+) %>%
+  group_by(group, group_name) %>%
+  summarise(
+    # Midpoint x for the label text
+    x_mid = mean(x_pos),
+    # Min/max x with a small buffer for the shaded band behind the label
+    x_min = min(x_pos) - 0.4,
+    x_max = max(x_pos) + 0.4,
+    .groups = "drop"
+  ) %>%
+  # Sort by x_mid (left-to-right position) NOT group number.
+  # This is the key fix — everything downstream now reads clusters
+  # in the same order that fviz_dend draws them left to right.
+  arrange(x_mid)
+
+# Derive the colour vector in left-to-right order by looking up each
+# cluster's group number in the named palette.
+# This single vector is used for BOTH fviz_dend AND annotate(),
+# so the two are guaranteed to stay in sync.
+ordered_colours <- colour_palette[as.character(annotation_df$group)]
+
+#Set label y-position relative to the tree's actual height
+y_label     <- -1
+y_band_half <- 0.06 * max(hc$height)
+
+fviz_dend(hc,
+  k           = best_k,
+  rect        = TRUE,
+  rect_fill   = TRUE,
+  horiz       = FALSE,          # Vertical layout — genre names land on x-axis
+                                # where angle = 45 in the theme can rotate them
+  rect_border = ordered_colours,
+  k_colors    = ordered_colours,
+  cex         = 0.75,
+  lwd         = 0.6,
+  main        = "Hierarchical Clustering of Music Genres",
+  subtitle    = "Ward D2 linkage | Weighted MCA coordinates | k = 5",
+  xlab        = "",
+  ylab        = "Height (Ward D2 Distance)",
+  ggtheme     = theme_minimal(base_size = 12)
+) +
+  # Shaded band — x maps to leaf positions, y maps to height (no flip confusion)
+  annotate("rect",
+    xmin  = annotation_df$x_min,
+    xmax  = annotation_df$x_max,
+    ymin  = y_label - y_band_half,
+    ymax  = y_label + y_band_half,
+    fill  = ordered_colours,
+    alpha = 0.15
+  ) +
+  # Group name labels sit at the negative y offset, centred across each cluster
+  annotate("text",
+    x        = annotation_df$x_mid,
+    y        = y_label,
+    label    = annotation_df$group_name,
+    colour   = ordered_colours,
+    fontface = "bold.italic",
+    size     = 4.5,
+    angle    = 25,
+    hjust    = 0.5,
+    vjust    = 0.5
+  ) +
+  # Expand the y-axis (height axis) to create space below zero
+  # where the group name labels now live
+  scale_y_continuous(
+    expand = expansion(mult = c(0)),
+    limits = c(-1.25, NA)
+    ) +
+  coord_cartesian(clip = "off") +
+  theme(
+    plot.title    = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5, colour = "grey40"),
+    legend.position = "none"
+    # 45-degree rotation — hjust = 1 right-aligns each label so it sits
+    # neatly beneath its own tick mark rather than drifting sideways
+    #axis.text.x   = element_text(angle = 45, hjust = 1, size = 9),
+    # The large bottom margin is essential — angled labels occupy more
+    # vertical space than straight ones and will be clipped without it
+    #plot.margin   = margin(t = 10, r = 20, b = 90, l = 20)
+  )
+
+#CLUSTER SCATTER PLOT One point per genre, coloured and labelled by cluster
+
+ggplot(mca_genre_final, aes(x = Dim1, y = Dim2,
+                         colour = as.character(group),
+                         label  = genre)) +
+  geom_point(size = 3.5, alpha = 0.85) +
+  geom_text_repel(
+    size          = 3.2,
+    max.overlaps  = 15,
+    box.padding   = 0.4,
+    point.padding = 0.3,
+    segment.alpha = 0.4
+  ) +
+  stat_ellipse(
+    aes(fill = as.character(group)),
+    geom    = "polygon",
+    alpha   = 0.08,
+    level   = 0.75,
+    show.legend = FALSE
+  ) +
+  scale_colour_manual(
+    values = colour_palette,
+    labels = mca_group_labels,
+    name   = "Clusters:"
+  ) +
+  scale_fill_manual(values = colour_palette, guide = "none") +
+  labs(
+    title    = "Genre Clusters in MCA Space",
+    subtitle = paste0(
+      "Dimensions 1–4 retained | k = ", best_k,
+      " clusters | Ward D2 linkage"
+    ),
+    x = paste0("Dimension 1 (", round(pct_inertia[1], 1), "% inertia)"),
+    y = paste0("Dimension 2 (", round(pct_inertia[2], 1), "% inertia)")
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title      = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle   = element_text(hjust = 0.5, colour = "grey40"),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank()
+  )
+
+
+#ASSIGN RESPONDENTS TO GENRE GROUPS
+
+mca_freq_data <- my_data_testing %>%
+  select(starts_with("Frequency_")) %>%
+  mutate(across(everything(), ~ case_when(
+    . == "Never"           ~ 0,
+    . == "Rarely"          ~ 1,
+    . == "Sometimes"       ~ 2,
+    . == "Very frequently" ~ 3,
+    TRUE                   ~ NA_real_
+  )))
+
+mca_genre_map <- mca_genre_final %>%
+  mutate(freq_col = paste0("Frequency_", genre))
+
+# For each cluster, compute the mean listening frequency per respondent
+mca_group_scores <- sapply(sort(unique(mca_genre_map$group)), function(g) {
+  cols <- mca_genre_map$freq_col[mca_genre_map$group == g]
+  cols <- cols[cols %in% names(mca_freq_data)]
+  rowMeans(mca_freq_data[, cols, drop = FALSE], na.rm = TRUE)
+})
+
+# Assign each person to their highest-scoring cluster
+my_data_testing$GenreGroup <- apply(mca_group_scores, 1, function(x) {
+  if (all(is.na(x))) NA else which.max(x)
+})
+
+my_data_testing$GenreGroup  <- as.factor(my_data_testing$GenreGroup)
+my_data_testing$GenreGroup_name <- mca_group_labels[as.character(
+  my_data_testing$GenreGroup)]
+
+#RESPONDENT DISTRIBUTION PLOT
+my_data_testing %>%
+  filter(!is.na(GenreGroup)) %>%
+  count(GenreGroup, GenreGroup_name) %>%
+  ggplot(aes(x = reorder(GenreGroup_name, -n), y = n,
+             fill = as.character(GenreGroup))) +
+  geom_col(width = 0.6, alpha = 0.9) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3.5, fontface = "bold") +
+  scale_fill_manual(values = colour_palette, guide = "none") +
+  labs(
+    title    = "Respondents per Genre Cluster",
+    subtitle = "Based on highest mean listening frequency across cluster genres",
+    x        = "Genre Cluster",
+    y        = "Number of Respondents"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title      = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle   = element_text(hjust = 0.5, colour = "grey40"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor   = element_blank()
+  )
+
+#Merge Genre Frequencies with test data
+my_data_testing_intermediate <- merge(
+    my_data_testing, mca_freq_data, by = 0, all.x = TRUE
+  ) |>
+  mutate(Row.names = as.numeric(Row.names)) |>
+  arrange(Row.names) |>
+  select(-ends_with(".x")) |>
+  rename_with(~ sub("\\.y$", "", .x))
+```
+
+\newpage
+
+## MCA Scatter Plot - Dimensions 1 vs 2 (Genre & Music Listening)
+
+```{r}
+
+# Build the plotting data frame using MCA row coordinates instead of PCA scores.
+# mca_result$rowcoord contains one row per respondent and one column per dimension,
+# directly analogous to pca_result$x — so the substitution is clean and direct.
+pca_df <- as.data.frame(mca_result$rowcoord[, 1:2]) %>%
+  rename(PC1 = V1, PC2 = V2) %>%    # Rename from default V1/V2 to PC1/PC2 so the
+                                      # rest of the plotting code needs no changes
+  mutate(
+    hours       = my_data_testing$Hoursperday,
+    genre_group = my_data_testing$GenreGroup_name,
+    respondent  = row_number()
+  )
+
+# Extract MCA inertia percentages for the axis labels.
+# mca_result$inertia.e gives raw inertia per dimension as a proportion of total,
+# so multiplying by 100 converts to percentage — same arithmetic as the PCA version.
+# If you want the Greenacre-adjusted values instead (which are more interpretable
+# as discussed earlier), use mca_result$inertia.e.adjusted here instead.
+
+mca_pct_inertia <- round(mca_result$inertia.e / sum(mca_result$inertia.e) * 100, 1)
+
+genre_colours <- setNames(
+  colour_palette,
+  mca_group_labels[names(colour_palette)]
+)
+
+
+ggplot(pca_df, aes(x = PC1, y = PC2, color = genre_group)) +
+  geom_hline(yintercept = 0,
+             linetype = "dashed", colour = "black", linewidth = 0.5) +
+  geom_vline(xintercept = 0,
+             linetype = "dashed", colour = "black", linewidth = 0.5) +
+  geom_point(aes(size = hours), alpha = 0.7) +
+  scale_color_manual(
+    values = genre_colours,
+    name   = "Genre Group"
+  ) +
+  scale_size_continuous(
+    name  = "Hours\nper Day",
+    range = c(1.5, 6)
+  ) +
+  labs(
+    title    = "MCA of Music Listening Patterns",
+    subtitle = "Daily music listening time | coloured by genre group",
+    # 'Inertia' replaces 'variance' since these are MCA dimensions, not PCA components.
+    # The distinction matters if anyone reading the plot understands the methods
+    # calling it variance in an MCA context would be technically incorrect.
+    x = sprintf("Dim 1 (%.1f%% inertia)", mca_pct_inertia[1]),
+    y = sprintf("Dim 2 (%.1f%% inertia)", mca_pct_inertia[2])
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title       = element_text(face = "bold", hjust = 0.5),
+    plot.subtitle    = element_text(hjust = 0.5, colour = "grey40"),
+    legend.position  = "right",
+    panel.grid.minor = element_blank()
+  )
+```
+
+\newpage
+
+## Exporting The Intermediary Data
+
+```{r}
+write.csv(my_data_testing_intermediate, "data/my_data_testing_intermediary.csv",
+          row.names = FALSE)
+```
+
+## Creating Final Data Set With Cleaned Columns
+
+```{r}
+
+my_data_testing <- read.csv("data/my_data_testing_intermediary.csv", header = TRUE)
+
+my_data_testing_clean <- my_data_testing %>%
+  mutate(
+    # Rename columns to clean names
+    Age = Age,
+    HoursPerDay = Hoursperday,
+    WhileWorking = Whileworking,
+    StreamingService = Primarystreamingservice,
+    BPM = BPM,
+    
+    # Add your already-created variables
+    ConsolidatedGenres = GenreGroup,
+    ConsolidatedGenresNames = GenreGroup_name,
+    ConsolidatedMentalHealthScore_PC1 = MentalHealthScore_PC1,
+    ConsolidatedMentalHealthScore_PC2 = MentalHealthScore_PC2,
+  ) %>%
+  
+  # Select the columns we want to keep
+  select(
+    Age,
+    HoursPerDay,
+    WhileWorking,
+    StreamingService,
+    BPM,
+    ConsolidatedGenres,
+    ConsolidatedGenresNames,
+    ConsolidatedMentalHealthScore_PC1,
+    ConsolidatedMentalHealthScore_PC2
+  )
+```
+
+### Saving The Cleaned Data
+
+```{r}
+write.csv(my_data_testing_clean, "data/my_data_testing_clean.csv", row.names = FALSE)
+```
+
+\newpage
+
+## Modeling
+
+### Load cleaned data
+
+```{r}
+my_data_testing_clean <- read.csv("data/my_data_testing_clean.csv", header = TRUE)
+```
+
+### Evaluate Simple Models
+
+#### Mental Health Scores vs Music Listening Hours
+
+```{r}
+#Mental Health Scores vs Music Listening Hours
+model1 <- lm(
+  ConsolidatedMentalHealthScore_PC1 ~ HoursPerDay, data = my_data_testing_clean
+  )
+
+# View summaries/plots
+summary(model1)
+plot(model1, which = 1,
+     labels.id = my_data_testing_clean$HoursPerDay)
+bptest(model1)
+model1_robustse <- sqrt(diag(vcovHC(model1, type="HC1")))
+
+#Mental Health Scores vs Music Listening Hours
+model2 <- lm(
+  ConsolidatedMentalHealthScore_PC2 ~ HoursPerDay, data = my_data_testing_clean
+  )
+
+# View summaries/plots
+summary(model2)
+plot(model2, which = 1,
+     labels.id = my_data_testing_clean$HoursPerDay)
+model2_robustse <- sqrt(diag(vcovHC(model2, type="HC1")))
+```
+
+```{r, results='asis', warning=FALSE, message=FALSE}
+stargazer(model1, model2,
+          type="latex",
+          se = list(model1_robustse, model2_robustse),
+          star.cutoffs = c(0.05, 0.01, 0.001, NA),
+          notes = "Significant at *p < 0.05, **p < 0.01, ***p < 0.001",
+          title = "Regression Results for Mental Health Scores vs Listening Hours",
+          dep.var.labels = c("Mental Health Score PC1", "Mental Health Score PC2"),
+          covariate.labels = c("Hours per Day"),
+          notes.append = FALSE,
+          header = FALSE
+          )
+```
+
+#### Mental Health Scores vs Genre groups
+
+```{r}
+
+# Make sure genre is categorical
+my_data_testing_clean$ConsolidatedGenresNames <- as.factor(
+  my_data_testing_clean$ConsolidatedGenresNames)
+
+#Mental Health Scores vs Genre groups
+model3 <- lm(
+  ConsolidatedMentalHealthScore_PC1 ~ ConsolidatedGenresNames,
+  data = my_data_testing_clean
+  )
+
+# View summaries/plots
+summary(model3)
+plot(model3, which = 1,
+     labels.id = my_data_testing_clean$HoursPerDay)
+model3_robustse <- sqrt(diag(vcovHC(model3, type="HC1")))
+
+#Mental Health Scores vs Genre groups
+model4 <- lm(
+  ConsolidatedMentalHealthScore_PC2 ~ ConsolidatedGenresNames, 
+  data = my_data_testing_clean
+  )
+
+# View summaries/plots
+summary(model4)
+plot(model4, which = 1,
+     labels.id = my_data_testing_clean$HoursPerDay)
+model4_robustse <- sqrt(diag(vcovHC(model4, type="HC1")))
+```
+
+```{r, results='asis', warning=FALSE, message=FALSE}
+
+stargazer(model3, model4,
+          type="latex",
+          se = list(model3_robustse, model4_robustse),
+          star.cutoffs = c(0.05, 0.01, 0.001, NA),
+          notes = "Significant at *p < 0.05, **p < 0.01",
+          title = "Regression Results for Mental Health Scores vs Genre Groups",
+          dep.var.labels = c(
+            "Mental Health Score (PC1)", "Mental Health Score (PC2)"),
+          covariate.labels = c(
+            "Country/Metal", "Gospel", "Latin/Kpop",
+            "Urban/Jazz"),
+          notes.append = FALSE,
+          header = FALSE
+          )
+```
+
+#### Mental Health Scores vs Genre groups, Age & BPM
+
+```{r}
+## Models with Age and Genre
+
+# 1. PCA1 + Genre_Score + Age
+model_a1 <- lm(
+  ConsolidatedMentalHealthScore_PC1 ~ ConsolidatedGenresNames + Age,
+  data = my_data_testing_clean
+)
+model_a1_robustse <- sqrt(diag(vcovHC(model_a1, type="HC1")))
+
+# 2. PCA2 + Genre_Score + Age
+model_a2 <- lm(
+  ConsolidatedMentalHealthScore_PC2 ~ ConsolidatedGenresNames + Age,
+  data = my_data_testing_clean
+)
+model_a2_robustse <- sqrt(diag(vcovHC(model_a2, type="HC1")))
+
+# 3. PCA1 + age
+model_b1 <- lm(
+  ConsolidatedMentalHealthScore_PC1 ~ Age,
+  data = my_data_testing_clean
+)
+model_b1_robustse <- sqrt(diag(vcovHC(model_b1, type="HC1")))
+
+# 4. PCA2 + age
+model_b2 <- lm(
+  ConsolidatedMentalHealthScore_PC2 ~ Age,
+  data = my_data_testing_clean
+)
+model_b2_robustse <- sqrt(diag(vcovHC(model_b2, type="HC1")))
+
+# View summaries/plots
+summary(model_a1)
+plot(model_a1, which = 1)
+
+summary(model_a2)
+plot(model_a2, which = 1)
+
+summary(model_b1)
+plot(model_b1, which = 1)
+
+summary(model_b2)
+plot(model_b2, which = 1)
+```
+
+```{r, results='asis', warning=FALSE, message=FALSE}
+
+stargazer(model_b1, model_a1,
+          type="latex",
+          se = list(model_b1_robustse, model_a1_robustse),
+          star.cutoffs = c(0.05, 0.01),
+          notes = "Significant at *p < 0.05, **p < 0.01",
+          title = "Regression Results for Mental Health Scores",
+          dep.var.labels = c("Mental Health PC1 Score"),
+          covariate.labels = c(
+            "Country/Metal", "Gospel", "Latin/Kpop",
+            "Urban/Jazz"),
+          notes.append = FALSE,
+          header = FALSE
+          )
+```
+
+### Adding Conditional Age / BPM into the models
+
+```{r}
+## Models with conditional Age / BPM
+
+
+# 1. PCA1 + Genre_Score + Age + BPM
+model1c <- lm(
+  ConsolidatedMentalHealthScore_PC1 ~ ConsolidatedGenresNames + Age + BPM,
+  data = my_data_testing_clean
+)
+model1c_robustse <- sqrt(diag(vcovHC(model1c, type="HC1")))
+
+# 2. PCA2 + Genre_Score + Age + BPM
+model2c <- lm(
+  ConsolidatedMentalHealthScore_PC2 ~ ConsolidatedGenresNames + Age + BPM,
+  data = my_data_testing_clean
+)
+model2c_robustse <- sqrt(diag(vcovHC(model2c, type="HC1")))
+
+# 3. PCA1 + BPM
+model3c <- lm(
+  ConsolidatedMentalHealthScore_PC1 ~ BPM,
+  data = my_data_testing_clean
+)
+model3c_robustse <- sqrt(diag(vcovHC(model3c, type="HC1")))
+
+# 4. PCA2 + BPM
+model4c <- lm(
+  ConsolidatedMentalHealthScore_PC2 ~ BPM,
+  data = my_data_testing_clean
+)
+model4c_robustse <- sqrt(diag(vcovHC(model4c, type="HC1")))
+
+# 5. PCA1 + Genre_Score + BPM
+model5c <- lm(
+  ConsolidatedMentalHealthScore_PC1 ~ ConsolidatedGenresNames + BPM,
+  data = my_data_testing_clean
+)
+model5c_robustse <- sqrt(diag(vcovHC(model5c, type="HC1")))
+
+# 6. PCA2 + Genre_Score + BPM
+model6c <- lm(
+  ConsolidatedMentalHealthScore_PC2 ~ ConsolidatedGenresNames + BPM,
+  data = my_data_testing_clean
+)
+model6c_robustse <- sqrt(diag(vcovHC(model6c, type="HC1")))
+
+# View summaries/plots
+summary(model1c)
+plot(model1c, which = 1)
+
+summary(model2c)
+plot(model2c, which = 1)
+
+summary(model3c)
+plot(model3c, which = 1)
+
+summary(model4c)
+plot(model4c, which = 1)
+
+summary(model5c)
+plot(model5c, which = 1)
+
+summary(model6c)
+plot(model6c, which = 1)
+```
+
+```{r, results='asis', warning=FALSE, message=FALSE}
+
+stargazer(model3c, model5c, model1c,
+          type="latex",
+          se = list(model3c_robustse, model5c_robustse, model1c_robustse),
+          star.cutoffs = c(0.05, 0.01),
+          notes = "Significant at *p < 0.05, **p < 0.01",
+          title = "Regression Results for Mental Health Scores",
+          dep.var.labels = c("Mental Health PC1 Score"),
+          covariate.labels = c(
+            "Country/Metal", "Gospel", "Latin/Kpop",
+            "Urban/Jazz"),
+          notes.append = FALSE,
+          header = FALSE
+          )
+```
+
+### Model of Interest
+
+```{r}
+modelx <- lm(
+  ConsolidatedMentalHealthScore_PC1 ~ Age + HoursPerDay,
+  data = my_data_testing_clean
+)
+modelx_robustse <- sqrt(diag(vcovHC(modelx, type="HC1")))
+summary(modelx)
+plot(modelx, which = 1)
+```
+
+```{r, results='asis', warning=FALSE, message=FALSE}
+# 1. PCA1 + Age + Hours Per Day
+
+stargazer(modelx,
+          type="latex",
+          se = list(modelx_robustse),
+          star.cutoffs = c(0.05, 0.01),
+          notes = "Significant at *p < 0.05, **p < 0.01",
+          title = "Regression Results for Mental Health Scores",
+          dep.var.labels = c("Mental Health PC1 Score"),
+          #covariate.labels = c("Country/Metal", "Gospel/Jazz", "Latin/Kpop", 
+          #"Pop", "Rock", "Urban"),
+          notes.append = FALSE,
+          header = FALSE
+          )
+```
+
+\newpage
+
+------------------------------------------------------------------------
+
+\newpage
+
+## Research Questions and Prep
+
+**Does music genre have an impact on mental health?**
+
+$X_i$ (independent variables): Genres
+
+$Y_i$ (dependent variable): Mental health state (**total score/average** of Depression, Insomnia, OCD & Anxiety)
+
+**Does time spent listening to music have an impact on mental health?**
+
+$X_j$ (independent variable): Hoursperday
+
+$Y_j$ (dependent variable): Mental health state
+
+**How does tempo impact mental health?**
+
+$X_k$ (independent variable): BPM
+
+$Y_k$ (dependent variable): Mental health state
+
+**Which genre results in the best sleep?**
+
+$X_l$ (independent variable): genre
+
+$Y_l$ (dependent variable): Insomnia
+
+## Multivariate analysis
+
+How do hours listened and genre impact mental health?
+
+$Y = \beta_0 + \beta_1 X_i + \beta_2 X_j$
+
+How do hours listened and tempo affect mental health states?
+
+$Y = \beta_0 + \beta_1 X_j + \beta_2 X_k$
+
+How do genre, listening time and tempo impact mental health?
+
+$Y = \beta_0 + \beta_1 X_{i_1} + \beta_2 X_{i_2} + \cdots + \beta_k X_j + \beta_{k+1} X_k$
+
+**Is there evidence of *overfitting* or *omitted-variable bias*?**
+
+### Groupings
+
+Should we group the mental health scores into a total? Should we group the types of music into fewer categories? Should we remove genres?
+
+### Other Variables / Ideas
+
+Hours per days - maybe omit less than 1s? People who like multi-genre vs single genre
+
+### Research Questions
+
+What is the appropriate ordinal test to do? Ordered logistic regression

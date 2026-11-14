@@ -1,0 +1,224 @@
+---
+title: "Module 12: CLM Homework"
+output: 'pdf_document'
+Authors: Hope, Shola, Emmanuel, Kala
+editor: visual
+fontsize: 11pt
+geometry: margin=.85in
+---
+
+## Set Up
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+
+library(tidyverse)
+library(lmtest)
+library(sandwich)
+library(patchwork)
+library(testthat)
+library(car)
+library(dplyr)
+library(stargazer)
+
+knitr::opts_chunk$set(message=FALSE)
+knitr::opts_chunk$set(echo = TRUE)
+options(stargazer.header = FALSE)
+theme_set(theme_minimal())
+```
+
+## Load in data and create Data Frame
+
+assumption: data in in same file location as this notebook
+
+```{r}
+mammals <- read.csv("mammals.csv", header = TRUE)
+str(mammals, vec.len=2)
+```
+
+## Q1 Instructions
+
+Grading comment:
+
+This homework is a group assignment. One person for each group will turn the assignment in and they will add their team members to the submission. Only submit one assignment per group.
+
+## Q2 Evaluating the Classical Linear Model Assumptions
+
+15 Points
+
+Grading comment:
+
+For the following questions, your task is to evaluate the Classical Linear Model assumptions. It is not enough to say that an assumption is met or not met; instead, present evidence based on your background knowledge, visualizations, and numerical summaries.
+
+The file `./data/mammals.csv` which is in the central repository on Github, contains 62 observations of mammal species. It was compiled by T. Allison and D. Cicchetti ("[Sleep in mammals: ecological and constitutional correlates](https://pubmed.ncbi.nlm.nih.gov/982039/)," Arch. Hydrobiol, vol. 75, p. 442, 1975.) A codebook is copied below:
+
+1.  `species`: Species of mammals
+
+2.  `body_wt`: Total body weight of the mammal (in kg)
+
+3.  `brain_wt`: Brain weight of the mammal (in kg)
+
+4.  `non_dreaming`: Number of hours of non dreaming sleep
+
+5.  `dreaming`: Number of hours of dreaming sleep
+
+6.  `total_sleep`: Total number of hours of sleep
+
+7.  `life_span`: Life span (in years)
+
+8.  `gestation`: Gestation time (in days)
+
+9.  `predation`: An index of how likely the mammal is to be preyed upon. 1 = least likely to be preyed upon. 5 = most likely to be preyed upon.
+
+10. `exposure`: An index of the how exposed the mammal is during sleep. 1 = least exposed (e.g., sleeps in a well-protected den). 5 = most exposed.
+
+11. `danger`: An index of how much danger the mammal faces from other animals. This index is based upon Predation and Exposure. 1 = least danger from other animals. 5 = most danger from other animals.
+
+You wish to run the following regression:
+
+$brain_{wt}=\beta_0 + \beta_1\cdot dreaming+\beta_3\cdot non{-}dreaming$
+
+**Please estimate the model written above**. Then, address each of the CLM assumptions in turn to answer the questions below. Please turn in a single-page `.pdf` file for each of the tasks. Your work cannot extend beyond a single pdf page, so you will have to be thoughtful about how you present your evidence in table and figures.
+
+\newpage
+
+### Q2.1 Independent and Identically Distributed
+
+I will begin by breaking out the components of IID and discussing the logical assumptions that can be made about the mammals data set.
+
+To define independence, we must assume that each residual/observation's error $(\epsilon)$ is completely unrelated to another observation. A challenge to independence comes from the fact that biologically related species may have similar sleep cycles or brain size to one another. The species *African elephant* is much closer related to the *Asian elephant* in brain/body weight than to the species *Molerat*. Thus we cannot assume that the dataset is entirely independent.
+
+Identically Distributed - This is an indicator that the samples were pulled from the same distribution population (same mean, same variance, same shape). Since we know the study looks at a limited set of mammals found in defined geographically areas, we cannot assume that identical distribution is satisfied.
+
+```{r, results='asis', warning=FALSE, message=FALSE}
+
+#Fit model
+model <- lm(brain_wt ~ dreaming + non_dreaming, data=mammals)
+summary(model)
+```
+
+```{r, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
+
+model_se <- sqrt(diag(vcovHC(model, type="HC1")))
+
+stargazer(model,
+          type="latex",
+          se = list(model_se),
+          star.cutoffs = c(0.05, NA),
+          notes = "Significant at *p < 0.05",
+          title = "Regression Results for Mammalian Brain Mass vs. Sleep Cycle",
+          dep.var.labels = "Brain Weight (g)",
+          covariate.labels = c("Dreaming (hours)", "Non-Dreaming (hours)"),
+          notes.append = FALSE,
+          header = FALSE
+          )
+```
+
+\newpage
+
+### Q2.2 No Perfect Collinearity
+
+The no perfect collinearity assumption assumes that no independent variable included in our model can be written as a linear relationship of other independent variables in the model. I tested correlation between `dreaming` and `non-dreaming`, and got a value of \~0.51, indicating that there is a moderately positive relationship between the two, but there is no perfect collinearity. Additionally, the scatter plot of `dreaming` and `non-dreaming` shows a slight relationship, but no perfect line. If the model were to include the `total_sleep` variable, there would be perfect collinearity because `total sleep` = `dreaming` + `non_dreaming`. By removing this variable in the model, we avoid perfect collinearity.
+
+Finally, by using the Variance Inflation Factor (`car::vif`) module, we get a value of 1.3595. This low value supports the notion that the variables are sufficiently distinct from one another to be included in the model. Thus we conclude that there is no perfect collinearity.
+
+```{r}
+cat("Correlation Coefficient:", cor(
+  mammals$dreaming, mammals$non_dreaming, use="complete.obs"))
+cat("Variation Inflation Factor:", car::vif(model))
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.align="center"}
+
+#Scatterplot of dreaming and non_dreaming, to make sure not perfect co linearity
+plot(
+  mammals$dreaming,
+  mammals$non_dreaming,
+  xlab = "Dreaming sleep (hours)",
+  ylab = "Non-dreaming sleep (hours)",
+  main = "Dreaming vs Non-dreaming Sleep"
+)
+abline(lm(non_dreaming ~ dreaming, data = mammals))
+```
+
+\newpage
+
+### Q2.3 Linear Conditional Expectation
+
+To assess if a model meets the requirements for linear conditional expectation, we evaluate the residuals against the predicted values. If the relationship is linear, the residuals would be scattered symmetrically around the zero value, appearing almost flat (horizontal).
+
+This is not the case with our data, as the general trend depicts the residuals have a negative slope when plotted against the predicted values, including extreme outliers. To mitigate the effect of the skewed data values, we performed a log-level transformation, concluding that the residuals are not symmetrically distributed in relation to the predicted values.
+
+```{r, warning=FALSE, message=FALSE}
+#Log-level transformation of the Brain Weight vs. Sleep Cycle
+model2 = lm(log(brain_wt) ~ dreaming + non_dreaming, data=mammals)
+```
+
+```{r, results='asis', echo=FALSE, warning=FALSE, message=FALSE, fig.align="center"}
+#Robust standard error values
+model2_se <- sqrt(diag(vcovHC(model2, type="HC1")))
+
+# Set up a 1x2 plot layout
+par(mfrow = c(1, 2))
+
+plot(model, which=1, labels.id = mammals$species, id.n=4,
+     main = "Brain Weight vs. Sleep Cycle", cex.lab = 0.8)
+plot(model2, which=1, labels.id = mammals$species, id.n=4,
+     main = "Log-level transformation of\n the Brain Weight vs. Sleep Cycle", cex.lab = 0.8)
+```
+
+\newpage
+
+### Q2.4 Constant Error Variance
+
+Looking at our data, there is evidence of heteroskedasticity occurring, where we see a greater distribution in variance as we move along the x-axis of our Residuals vs Fitted plot. Thus, the estimated standard errors are deemed unreliable using this model. We thus conclude that the Constant Error Variance assumption is not met. Performing a log-level transformation attempts to mitigate this.
+
+```{r, results='asis', echo=FALSE, warning=FALSE, message=FALSE, fig.width=3.5, fig.height=3.5, fig.align="center"}
+plot(model, which=1, labels.id = mammals$species, id.n=4)
+stargazer(model2,
+          type="latex",
+          se = list(model2_se),
+          star.cutoffs = c(0.05, 0.01, NA),
+          notes = "Significant at *p < 0.05, **p < 0.01",
+          title = "Regression Results for ln(Brain) vs. Mammalian Sleep Cycle",
+          dep.var.labels = "ln(Brain Weight [g])",
+          covariate.labels = c("Dreaming (hours)", "Non-Dreaming (hours)"),
+          notes.append = FALSE,
+          header = FALSE
+          )
+```
+
+\newpage
+
+### Q2.5 Normal Distribution of Errors
+
+To evaluate the normality assumption, I examined the residuals from the model using a Quantile-Quantile (Q-Q) plot, density plot, and a Shapiro-Wilk test.
+
+The Q-Q plot shows substantial deviation from the diagonal reference line, particularly in the upper tail, indicating right skew. The density plot confirms this, since the residuals are not bell-shaped and are heavily concentrated near zero with a long right tail. The Shapiro-Wilk test returns a statistically significant result (p \< 0.05), providing formal evidence against normality.
+
+This violation is not surprising. The outcome variable, `brain_wt`, ranges from under 1g to over 5,700g across mammal species, creating extreme outliers (e.g., elephants) that heavily influence the residuals. Therefore, the normality of errors assumption is not met in this model as specified.
+
+```{r, warning=FALSE, message=FALSE}
+
+# Shapiro-Wilk test
+shapiro.test(resid(model))
+```
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.align="center"}
+# Set up a 1x2 plot layout
+par(mfrow = c(1, 2))
+
+# Normal Q-Q Plot
+plot(model, which = 2, labels.id = mammals$species,
+     main = "Normal Q-Q Plot of Residuals", cex.lab = 0.8)
+
+# Histogram of residuals
+hist(resid(model),
+     breaks = 20,
+     main = "Histogram of Residuals",
+     xlab = "Residuals",
+     col = "steelblue",
+     border = "white",
+     probability = TRUE)
+curve(dnorm(x, mean = mean(resid(model)), sd = sd(resid(model))),
+      add = TRUE, col = "red", lwd = 2)
+```

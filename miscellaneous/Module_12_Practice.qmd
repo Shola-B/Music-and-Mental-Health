@@ -1,0 +1,327 @@
+---
+title: "Module 12: CLM Homework"
+format: "html"
+Authors: Hope, Shola, Emmanuel, Kala
+editor: visual
+---
+
+## Set Up
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message=FALSE)
+
+library(tidyverse)
+library(lmtest)
+library(sandwich)
+library(patchwork)
+library(testthat)
+library(car)
+library(dplyr)
+library(stargazer)
+
+knitr::opts_chunk$set(message=FALSE)
+theme_set(theme_minimal())
+
+```
+
+## Load in data and create Data Frame
+
+assumption: data in in same file location as this notebook
+
+```{r}
+mammals <- read.csv("miscellaneous/mammals.csv", header = TRUE)
+str(mammals)
+#table(mammals$species)
+```
+
+## Q1 Instructions
+
+Grading comment:
+
+This homework is a group assignment. One person for each group will turn the assignment in and they will add their team members to the submission. Only submit one assignment per group.
+
+## Q2 Evaluating the Classical Linear Model Assumptions
+
+15 Points
+
+Grading comment:
+
+For the following questions, your task is to evaluate the Classical Linear Model assumptions. It is not enough to say that an assumption is met or not met; instead, present evidence based on your background knowledge, visualizations, and numerical summaries.
+
+The file `./data/mammals.csv` which is in the central repository on Github, contains 62 observations of mammal species. It was compiled by T. Allison and D. Cicchetti ("[Sleep in mammals: ecological and constitutional correlates](https://pubmed.ncbi.nlm.nih.gov/982039/)," Arch. Hydrobiol, vol. 75, p. 442, 1975.) A codebook is copied below:
+
+1.  species: Species of mammals
+
+2.  body_wt: Total body weight of the mammal (in kg)
+
+3.  brain_wt: Brain weight of the mammal (in kg)
+
+4.  non_dreaming: Number of hours of non dreaming sleep
+
+5.  dreaming: Number of hours of dreaming sleep
+
+6.  total_sleep: Total number of hours of sleep
+
+7.  life_span: Life span (in years)
+
+8.  gestation: Gestation time (in days)
+
+9.  predation: An index of how likely the mammal is to be preyed upon. 1 = least likely to be preyed upon. 5 = most likely to be preyed upon.
+
+10. exposure: An index of the how exposed the mammal is during sleep. 1 = least exposed (e.g., sleeps in a well-protected den). 5 = most exposed.
+
+11. danger: An index of how much danger the mammal faces from other animals. This index is based upon Predation and Exposure. 1 = least danger from other animals. 5 = most danger from other animals.
+
+You wish to run the following regression:
+
+$brain_{wt}=\beta_0 + \beta_1\cdot dreaming+\beta_3\cdot non{-}dreaming$
+
+Please estimate the model written above. Then, address each of the CLM assumptions in turn to answer the questions below. Please turn in a single-page `.pdf` file for each of the tasks. Your work cannot extend beyond a single pdf page, so you will have to be thoughtful about how you present your evidence in table and figures.
+
+\newpage
+
+### Q2.1 Independent and Identically Distributed
+
+Evaluate the **IID** assumption.
+
+## Assessing whether the data is IID
+
+-   Assessing random sampling comes from analysis of the *design* not from the data
+-   What is the *reference population*?
+    -   Practically, "How was the reference population sampled to generate data?"
+    -   Could people *select* to answer a survey?
+    -   Were only new hires surveyed? Was there some other "sorting" in the sampling process?
+    -   Did we examine only the riskiest or most promising leads?
+
+## Assessing whether the data is IID
+
+-   Are units that are closer to one another more similar than those that are further
+    -   Did the sampling process identify "clusters" of data?
+
+    -   Close could be physical distance, social distance, or another metric
+
+### ANSWER - Write up NOT code {.underline}
+
+I will begin by breaking out the components of IID and discussing the logical assumptions that can be made about the mammals data set. Independent - to determine if these samples are independent we have to look at the method in which the data was sourced. This data was collected from previous existing literature based on completeness and availability specifically having variables related to the variables listed in the set. Upon reviewing the species column we can confirm there are no duplicates as well. Thus we are now forced to assume/conclude this data was collected as independent samples. This does not necessarily mean we won't see some level of clustering due to geographical impact related to specific species. Identically Distributed - This is an indicator that the samples were pulled from the same distribution population. Because we know they are only looking at mammals and the data is being pulled from scientific studies we can move forward with the assumption that the population was fully representative and identical.
+
+**To define independence, we must assume that each residual/observation's error** $(\epsilon)$ **is completely unrelated to another observation. A challenge to independence comes from the fact that biologically related species may have similar sleep cycles or brain size to one another. The species *African elephant* is much closer related to the *Asian elephant* in brain/body weight than to the species *Molerat*. Thus we cannot assume that the dataset is entirely independent**.
+
+```{r, results='asis', warning=FALSE, message=FALSE}
+par(mfrow = c(1, 1))
+model <- lm(brain_wt ~ dreaming + non_dreaming, data=mammals)
+model_se <- sqrt(diag(vcovHC(model, type="HC1")))
+
+stargazer(model,
+          type="text",
+          se = list(model_se),
+          star.cutoffs = c(0.05, NA),
+          notes = "Significant at *p < 0.05",
+          title = "Regression Results for Brain vs. Mammalian Sleep Cycle",
+          dep.var.labels = "Brain Weight (g)",
+          covariate.labels = c("Dreaming (hours)", "Non-Dreaming (hours)"),
+          notes.append = FALSE
+          )
+
+plot(model, which=1, labels.id=mammals$species)
+```
+
+\newpage
+
+### Q2.2 No Perfect Collinearity
+
+3 Points
+
+Grading comment:
+
+Evaluate the **No perfect Colinearity** assumption.
+
+What is Perfect Collinearity?
+
+-   If one data series can be produced exactly through a simple transformation of other data series, then the data is collinear.
+
+-   For example, within the population of MIDS students suppose we have two variables
+
+    ## Why is Perfect Collinearity a Problem?
+
+    -   To which of the variables should we assign the covariance?
+    -   System has two variables and two equations -- non-unique solution
+
+    ## Assessing Perfect Collinearity
+
+    -   **Perfect** Collinearity is easy to spot
+
+    -   Regressions won't run, or will drop a feature
+
+        ## Assessing Near Perfect Collinearity
+
+        -   **Nearly Perfect** Collinearity is *harder* to spot
+        -   Regressions will have large standard errors on colinear features.
+        -   [For example](https://stats.stackexchange.com/questions/3549/why-is-it-possible-to-get-significant-f-statistic-p-001-but-non-significant-r/14528#14528), this conversation with Will Huber over on Stack Overflow.
+
+### ANSWER - Write up NOT code {.underline}
+
+The no perfect collinearity assumption assumes that no independent variable included in our model can be written as a linear relationship of other independent variables in the model. In our model, the independent variables that are included are dreaming and non-dreaming. I tested correlation between dreaming and non-dreaming, and got a value of \~0.51, indicating that there is a moderately positive relationship between the two, but there is not perfect collinearity. Additionally, the scatter plot of dreaming and non-dreaming shows a slight relationship, but not an exactly perfect line, with the data scattered. Therefore, there is no perfect collinearity. Lastly, the model runs, indicating that there is no perfect collinearity in the model because if there was perfect collinearity, it would not run. If the model were to also include the total sleep variable, there would be perfect collinearity because total sleep = dreaming + non_dreaming. However, by avoiding including this variable in the model, the model is able to avoid perfect collinearity.
+
+**Using the Variance Inflation Factor (vif) module, we get a value of 1.3595. This low value supports the notion that the variables are sufficiently distinct from one another to be included in the model. Thus we conclude that there is no perfect collinearity.**
+
+```{r}
+
+#Checking correlation
+cat("Correlation Coefficient:", cor(mammals$dreaming, mammals$non_dreaming, use = "complete.obs"))
+
+#Scatterplot of dreaming and non_dreaming, to make sure not perfect co linearity
+plot(
+  mammals$dreaming,
+  mammals$non_dreaming,
+  xlab = "Dreaming sleep (hours)",
+  ylab = "Non-dreaming sleep (hours)",
+  main = "Dreaming vs Non-dreaming Sleep"
+)
+
+abline(lm(non_dreaming ~ dreaming, data = mammals))
+cat("\nVariation Inflation Factor:", car::vif(model))
+```
+
+\newpage
+
+### Q2.3 Linear Conditional Expectation
+
+3 Points
+
+Grading comment:
+
+Evaluate the **Linear Conditional Expectation:** assumption.
+
+Assessing linear conditional expectation, I
+
+-   To check whether we have a linear conditional expectation, we should look at the `X` values.
+-   If we have *very* low dimensional data this might be possible, but a more sound approach is to examine the *residuals*.
+-   Assessing linear conditional expectation is a non-dispositive, but potentially useful test
+    -   If you *reject the null* you've got good evidence that your data is *not* distributed according to your model.
+    -   But, you could try to transform the data!
+
+### [ANSWER - Write up]{.underline}
+
+To assess if a model meets the requirements for linear conditional expectation, we evaluate the residuals against the predicted values. If the relationship is linear, the residuals would be scattered symmetrically around the zero value, appearing almost flat (horizontal). This is not the case with our data, as the general trend depicts the residuals have a negative slope with extreme outliers, intercepting the x-axis at around zero. To mitigate the effect of the skewed data values, we performed a log-level transformation, concluding that the residuals are not symmetrically distributed in relation to the predicted values.
+
+```{r}
+
+model2 = lm(log(brain_wt) ~ dreaming + non_dreaming, data=mammals)
+summary(model2)
+
+plot(model, which=1, labels.id = mammals$species, id.n=4)
+plot(model2, which=1, labels.id = mammals$species, id.n=4)
+```
+
+\newpage
+
+### Q2.4 Constant Error Variance
+
+3 Points
+
+Grading comment:
+
+Evaluate the **Homoskedastic Errors:** assumption.
+
+Homoskedastic Conditional Variance (Assumption 4)
+
+-   When data has different conditional variance we say that it is *heteroskedastic*.
+-   Beginning in our large sample regression unit, we've estimated standard errors that are responsive to non-constant error variance
+
+## What causes heteroskedastic variance?
+
+-   Changes in reporting over time
+-   Changes in variance at different levels within a panel
+-   Model misspecification
+-   Skewness, or long tails in data
+
+## What are the consequences of heteroskedastic variance?
+
+1.  **Classical Standard Errors are Wrong** (They are biased!)
+2.  **CLM can be improved upon** for producing estimates of coefficients (but beyond this class).
+
+## Types of tests
+
+-   Two forms of test -- ocular and statistical
+-   **Eye test** -- look for "fanning out of data" across the predicted values.
+-   **Statistical test** the *Breusch-Pagan* test *does* come with a p-value
+
+### [ANSWER - Write up]{.underline}
+
+Looking at our data, there is evidence of heteroskedasticity occurring, where we see a greater distribution in variance as we move along the x-axis of our Residuals vs Fitted plot. Thus, the estimated standard errors are deemed unreliable using this model. We therefore conclude that the Constant Error Variance assumption is not met.
+
+```{r}
+plot(model, which=1, labels.id = mammals$species, id.n=4)
+plot(model2, which=1, labels.id = mammals$species, id.n=4)
+```
+
+\newpage
+
+### Q2.5 Normal Distribution of Errors
+
+3 Points
+
+Grading comment:
+
+Evaluate the **Normally Distributed Errors:** assumption.
+
+Reviewing the Classical Linear Model (CLM) assumption of normally distributed errors requires analyzing model residuals for normality to ensure valid hypothesis testing (t -tests, f-tests) and confidence intervals. The best approach combines graphical diagnostics (Q-plots, histograms) with formal tests to assess if residuals are centered around zero with bell-shaped distribution.
+
+-   **Normal Q-Q Plot**: Use plot(model, which = 2) to generate a Quantile-Quantile plot. If the residuals follow a normal distribution, the points should align closely with the straight diagonal reference line.
+
+    -   **Curvature (Bow-shaped)**: Indicates skewness in the residuals.
+
+    -   **S-shape**: Indicates excessive kurtosis (heavy or light tails)
+
+-   **Histogram of Residuals**: Use hist(resid(model)) to check for a bell-shaped curve. Deviations like multiple peaks or extreme skew suggest non-normality.
+
+-   **Density Plot**: Use plot(density(resid(model))) to visually assess if the distribution is symmetric and bell-shaped.
+
+### ANSWER - Write up NOT code
+
+To evaluate the normality assumption, I examined the residuals from the model using a Quantile-Quantile plot, histogram, density plot, and a Shapiro-Wilk test.
+
+The Q-Q plot shows substantial deviation from the diagonal reference line, particularly in the upper tail, indicating right skew. The histogram and density plot confirm this, the residuals are not bell-shaped and are heavily concentrated near zero with a long right tail. The Shapiro-Wilk test returns a statistically significant result (p \< 0.05), providing formal evidence against normality.
+
+This violation is not surprising. The outcome variable, brain_wt, ranges from under 1g to over 5,700g across mammal species, creating extreme outliers (e.g., elephants) that heavily influence the residuals. A log transformation of brain_wt would likely produce more normally distributed residuals and better satisfy this assumption.
+
+Therefore, the normality of errors assumption is Not Met in this model as specified.
+
+```{r}
+
+# Fit the model (consistent with what was already run in Q2.2)
+model <- lm(brain_wt ~ dreaming + non_dreaming, data = data)
+
+# --- Graphical Diagnostics ---
+
+# Set up a 1x3 plot layout
+par(mfrow = c(1, 2))
+
+# 1. Normal Q-Q Plot
+plot(model, which = 2, labels.id = data$species,
+     main = "Normal Q-Q Plot of Residuals")
+
+# 2. Histogram of residuals
+hist(resid(model),
+     breaks = 15,
+     main = "Histogram of Residuals",
+     xlab = "Residuals",
+     col = "steelblue",
+     border = "white",
+     probability = TRUE)
+curve(dnorm(x, mean = mean(resid(model)), sd = sd(resid(model))),
+      add = TRUE, col = "red", lwd = 2)
+
+# 3. Density plot of residuals
+#plot(density(resid(model)),
+#     main = "Density Plot of Residuals",
+#     xlab = "Residuals")
+#abline(v = 0, col = "red", lty = 2)
+#par(mfrow = c(1, 1))
+
+# --- Formal Statistical Test ---
+# Shapiro-Wilk test (works well for n < 5000)
+shapiro.test(resid(model))
+
+```
